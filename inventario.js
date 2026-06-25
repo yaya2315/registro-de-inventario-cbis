@@ -132,10 +132,7 @@ $("#btn-camara").addEventListener("click", ()=> $("#f-camara").click());
 $("#btn-galeria").addEventListener("click", ()=> $("#f-galeria").click());
 $("#f-camara").addEventListener("change", async e => { await agregarFotos(e.target.files); e.target.value=""; });
 $("#f-galeria").addEventListener("change", async e => { await agregarFotos(e.target.files); e.target.value=""; });
-$("#fotos-grid").addEventListener("click", e => {
-  const b = e.target.closest("[data-foto]");
-  if(b){ fotos.splice(Number(b.dataset.foto),1); pintarFotos(); }
-});
+/* El click en fotos-grid (quitar + lightbox) se maneja al final del archivo */
 
 /* ---- Leer / escribir formulario ---- */
 function leerForm(){
@@ -231,4 +228,94 @@ $("#search").addEventListener("input", e => pintarTabla(e.target.value));
 /* Cerrar sesión */
 $("#logout").addEventListener("click", async () => {
   if(confirm("¿Cerrar sesión?")){ await signOut(auth); location.href="index.html"; }
+});
+
+/* ═══════════════════════════════════════════════════════════════
+   LIGHTBOX DE FOTOS
+   ═══════════════════════════════════════════════════════════════ */
+const lb       = document.getElementById("lightbox");
+const lbImg    = document.getElementById("lb-img");
+const lbPrev   = document.getElementById("lb-prev");
+const lbNext   = document.getElementById("lb-next");
+const lbClose  = document.getElementById("lb-close");
+const lbCounter= document.getElementById("lb-counter");
+const lbThumbs = document.getElementById("lb-thumbs");
+let lbIndex    = 0;
+
+function lbAbrir(index){
+  if(!fotos.length) return;
+  lbIndex = index;
+  lb.classList.add("open");
+  document.body.style.overflow = "hidden";
+  lbRenderizar();
+}
+
+function lbCerrar(){
+  lb.classList.remove("open");
+  document.body.style.overflow = "";
+}
+
+function lbRenderizar(){
+  /* imagen con fade */
+  lbImg.classList.add("fade");
+  setTimeout(()=>{
+    lbImg.src = fotos[lbIndex];
+    lbImg.classList.remove("fade");
+  }, 180);
+
+  /* contador */
+  lbCounter.textContent = `${lbIndex + 1} / ${fotos.length}`;
+
+  /* flechas */
+  lbPrev.classList.toggle("hidden", lbIndex === 0);
+  lbNext.classList.toggle("hidden", lbIndex === fotos.length - 1);
+
+  /* miniaturas */
+  lbThumbs.innerHTML = fotos.map((src, i) => `
+    <div class="lb-thumb ${i===lbIndex?'active':''}" data-lb="${i}">
+      <img src="${src}" alt="Miniatura ${i+1}" />
+    </div>`).join("");
+
+  /* centrar miniatura activa */
+  const thumbActiva = lbThumbs.querySelector(".active");
+  if(thumbActiva) thumbActiva.scrollIntoView({ inline:"center", behavior:"smooth" });
+}
+
+function lbNavegar(dir){
+  const nuevo = lbIndex + dir;
+  if(nuevo < 0 || nuevo >= fotos.length) return;
+  lbIndex = nuevo;
+  lbRenderizar();
+}
+
+/* Abrir al hacer clic en una foto del grid */
+$("#fotos-grid").addEventListener("click", e => {
+  const item = e.target.closest(".foto-item");
+  const del  = e.target.closest("[data-foto]");
+  if(del){ fotos.splice(Number(del.dataset.foto),1); pintarFotos(); return; }
+  if(item){
+    const img = item.querySelector("img");
+    if(img){
+      const idx = [...document.querySelectorAll(".foto-item img")].indexOf(img);
+      if(idx !== -1) lbAbrir(idx);
+    }
+  }
+});
+
+lbPrev.addEventListener("click", () => lbNavegar(-1));
+lbNext.addEventListener("click", () => lbNavegar(1));
+lbClose.addEventListener("click", lbCerrar);
+lb.addEventListener("click", e => { if(e.target === lb) lbCerrar(); });
+
+lbThumbs.addEventListener("click", e => {
+  const t = e.target.closest("[data-lb]");
+  if(t){ lbIndex = Number(t.dataset.lb); lbRenderizar(); }
+});
+
+/* Teclado: ← → Escape */
+document.addEventListener("keydown", e => {
+  if(!lb.classList.contains("open")) return;
+  if(e.key === "ArrowLeft")  lbNavegar(-1);
+  if(e.key === "ArrowRight") lbNavegar(1);
+  if(e.key === "Escape")     lbCerrar();
 });
