@@ -1,0 +1,58 @@
+/* ════════════════════════════════════════════════════════════
+   ESTILOS BASE · cbis
+   Fundación compartida por todas las páginas:
+   tokens de marca, reset, fondo, atmósfera y animaciones.
+   ════════════════════════════════════════════════════════════ */
+
+:root{
+  /* Paleta de marca cbis */
+  --violet:#7b4ff0; --violet-strong:#5a32c0; --violet-deep:#3d2570;
+  --gold:#f5b614; --teal:#45a99c; --magenta:#d6418f; --coral:#e55d4e;
+
+  /* Texto */
+  --txt:#ffffff; --txt-soft:#cdbdf2; --txt-muted:#9a8bc4;
+
+  /* Superficies */
+  --field-bg:rgba(255,255,255,.05); --field-border:rgba(255,255,255,.12);
+  --card-bg:rgba(255,255,255,.06);  --card-border:rgba(255,255,255,.12);
+
+  /* Estados */
+  --ok:#54d6a5; --err:#ff8a7a;
+
+  /* Forma y movimiento */
+  --radius:14px; --radius-lg:20px;
+  --ease:cubic-bezier(.16,.84,.44,1);
+}
+
+*{ margin:0; padding:0; box-sizing:border-box; }
+html{ scroll-behavior:smooth; }
+
+body{
+  font-family:"Inter","Poppins",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  color:var(--txt);
+  min-height:100dvh;
+  font-synthesis:none;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+  position:relative;
+  overflow-x:hidden;
+  background:radial-gradient(130% 80% at 50% -5%, #6a44a8 0%, #432a78 40%, #2a1850 76%, #1f1240 100%);
+  background-attachment:fixed;
+}
+
+/* Orbes de color de la marca (atmósfera) */
+.glow{ position:fixed; border-radius:50%; filter:blur(80px); opacity:.22; pointer-events:none; z-index:0; }
+.glow.g1{ width:340px; height:340px; background:var(--magenta); top:-100px; left:-90px; opacity:.30; }
+.glow.g2{ width:300px; height:300px; background:var(--teal);    bottom:-120px; right:-80px; opacity:.18; }
+.glow.g3{ width:240px; height:240px; background:var(--gold);    top:40%; left:-110px; opacity:.12; }
+.glow.g4{ width:260px; height:260px; background:var(--coral);   top:6%; right:-100px; opacity:.18; }
+
+/* Animaciones compartidas */
+@keyframes rise{ from{ opacity:0; transform:translateY(12px); } to{ opacity:1; transform:none; } }
+@keyframes spin{ to{ transform:rotate(360deg); } }
+
+@media (prefers-reduced-motion: reduce){
+  *{ animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; }
+  html{ scroll-behavior:auto; }
+  .spinner{ animation:spin 1s linear infinite; }
+}
