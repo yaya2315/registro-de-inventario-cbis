@@ -87,3 +87,41 @@ h1{
 
 .demo-tag{ margin-top:22px; font-size:.72rem; color:var(--txt-muted); text-align:center; opacity:.75; z-index:1; }
 .demo-tag b{ color:var(--gold); font-weight:600; }
+/* ══════════════════════════════════════════════════════════════
+   RESPONSIVE LOGIN
+   ══════════════════════════════════════════════════════════════ */
+
+/* Celular (< 480px) */
+@media (max-width:479px){
+  body{ padding:20px 14px; }
+  main{ gap:4px; }
+
+  .brand{ margin-bottom:18px; gap:4px; }
+  .logo{ height:66px; margin-bottom:6px; }
+  h1{ font-size:1.3rem; }
+  .subtitle{ font-size:.85rem; }
+
+  .card{ padding:22px 16px 20px; border-radius:18px; }
+  .card h2{ font-size:1.1rem; margin-bottom:16px; }
+
+  .field{ margin-bottom:13px; }
+  .field label{ font-size:.78rem; margin-bottom:5px; }
+  .control input{ height:46px; font-size:.88rem; }
+
+  .btn{ height:46px; font-size:.92rem; }
+  .footnote{ font-size:.74rem; margin-top:14px; }
+  .demo-tag{ font-size:.68rem; margin-top:16px; }
+}
+
+/* Celular muy angosto (< 360px) */
+@media (max-width:359px){
+  body{ padding:14px 10px; }
+  .logo{ height:54px; }
+  h1{ font-size:1.15rem; }
+  .card{ padding:18px 13px 16px; }
+}
+
+/* Tablet y PC: sin cambios, el diseño base ya es correcto */
+@media (min-width:480px){
+  body{ padding:40px 24px; }
+}
