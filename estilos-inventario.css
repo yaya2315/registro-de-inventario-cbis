@@ -8,11 +8,13 @@ body{ padding:0 0 60px; }
 .wrap{ position:relative; z-index:1; width:100%; max-width:760px; margin:0 auto; padding:26px 18px 0; }
 
 /* Encabezado */
-.topbar{ display:flex; align-items:center; gap:14px; margin-bottom:6px; }
-.topbar .logo{ height:46px; width:auto; max-width:130px; flex-shrink:0; object-fit:contain; filter:drop-shadow(0 6px 14px rgba(0,0,0,.35)); }
+.topbar{ display:flex; flex-direction:row; align-items:center; gap:16px; margin-bottom:8px; }
+.topbar .logo{ height:54px; width:auto; max-width:150px; flex-shrink:0; object-fit:contain; filter:drop-shadow(0 6px 14px rgba(0,0,0,.35)); }
+.topbar > div{ flex:1; min-width:0; }
 .topbar h1{
-  font-size:clamp(1.4rem,5.5vw,1.85rem); font-weight:700; letter-spacing:-.02em; line-height:1.1;
+  font-size:clamp(1.4rem,3.5vw,1.85rem); font-weight:700; letter-spacing:-.02em; line-height:1.1;
   background:linear-gradient(180deg,#fff,#e3d8ff); -webkit-background-clip:text; background-clip:text; color:transparent;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
 }
 .topbar p{ font-size:.88rem; color:var(--txt-soft); font-weight:500; margin-top:2px; }
 
@@ -249,8 +251,8 @@ tbody tr:hover{ background:rgba(255,255,255,.03); }
 
   /* Encabezado: logo + texto apilados */
   .topbar{ flex-direction:column; align-items:flex-start; gap:8px; margin-bottom:10px; }
+  .topbar h1{ font-size:1.2rem; white-space:normal; }
   .topbar .logo{ height:38px; }
-  .topbar h1{ font-size:1.2rem; }
   .topbar p{ font-size:.8rem; }
 
   /* Botón cerrar sesión ancho completo */
