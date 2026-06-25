@@ -237,23 +237,116 @@ tbody tr:hover{ background:rgba(255,255,255,.03); }
 .lb-thumb:hover{ opacity:.85; transform:translateY(-2px); }
 .lb-thumb.active{ border-color:var(--violet); opacity:1; }
 
-/* ════════════ RESPONSIVE (celular · tablet · computadora) ════════════ */
+/* ══════════════════════════════════════════════════════════════
+   RESPONSIVE — celular (< 480px) · tablet (480–979px) · PC (≥ 980px)
+   ══════════════════════════════════════════════════════════════ */
 
-/* Celular muy angosto: estadísticas en 1 columna y acciones de foto apiladas */
+/* ── BASE MÓVIL (todo celular) ─────────────────────────────── */
+@media (max-width:479px){
+
+  /* Contenedor */
+  .wrap{ padding:14px 12px 0; }
+
+  /* Encabezado: logo + texto apilados */
+  .topbar{ flex-direction:column; align-items:flex-start; gap:8px; margin-bottom:10px; }
+  .topbar .logo{ height:38px; }
+  .topbar h1{ font-size:1.2rem; }
+  .topbar p{ font-size:.8rem; }
+
+  /* Botón cerrar sesión ancho completo */
+  .btn-logout{ width:100%; margin:10px 0 16px; font-size:.85rem; height:42px; }
+
+  /* Estadísticas: 2 columnas compactas */
+  .stats{ grid-template-columns:repeat(2,1fr); gap:8px; margin-bottom:16px; }
+  .stat{ padding:12px 10px; gap:6px; border-radius:14px; }
+  .stat .ico{ width:32px; height:32px; border-radius:8px; }
+  .stat .ico svg{ width:17px; height:17px; }
+  .stat .lbl{ font-size:.7rem; }
+  .stat .num{ font-size:1.4rem; }
+
+  /* Cards */
+  .card{ padding:16px 14px; border-radius:16px; margin-bottom:14px; }
+  .card-title{ font-size:1rem; gap:7px; }
+  .card-title svg{ width:17px; height:17px; }
+  .card-sub{ font-size:.8rem; margin-bottom:12px; }
+
+  /* Labels y campos */
+  label.fl{ font-size:.75rem; margin-bottom:6px; }
+  input, select, textarea{ min-height:46px; padding:11px 13px; font-size:.88rem; border-radius:11px; }
+  textarea{ min-height:68px; }
+
+  /* Formulario: 1 columna siempre */
+  .grid-form{ grid-template-columns:1fr; gap:12px; }
+  .grid-form .full{ grid-column:1; }
+
+  /* Botones del formulario apilados */
+  .form-actions{ flex-direction:column; gap:10px; margin-top:16px; }
+  .form-actions .btn{ width:100%; min-width:0; }
+  .btn{ height:46px; font-size:.9rem; }
+
+  /* Búsqueda por código de barras */
+  .search-row{ flex-direction:column; gap:8px; }
+  .search-row input{ min-width:0; }
+  .search-row .btn{ width:100%; }
+
+  /* Fotos */
+  .fotos-acciones{ flex-direction:column; gap:8px; }
+  .fotos-acciones .btn{ width:100%; min-width:0; }
+  .fotos-grid{ grid-template-columns:repeat(auto-fill, minmax(72px,1fr)); gap:8px; }
+
+  /* Tabla: columnas compactas */
+  .table-scroll{ margin:0 -2px; }
+  table{ min-width:280px; }
+  thead th{ font-size:.68rem; padding:0 6px 10px; }
+  tbody td{ padding:10px 6px; font-size:.82rem; }
+  .cod{ font-size:.76rem; }
+  .nom{ max-width:110px; font-size:.84rem; }
+  .pill{ font-size:.7rem; padding:4px 8px; }
+  .acts{ gap:5px; }
+  .icon-btn{ width:30px; height:30px; border-radius:7px; }
+  .icon-btn svg{ width:14px; height:14px; }
+
+  /* Banner edición */
+  .edit-banner{ font-size:.8rem; padding:10px 12px; gap:7px; }
+  .edit-banner svg{ width:15px; height:15px; }
+
+  /* Lightbox en celular */
+  #lb-img-wrap{ padding:56px 8px 10px; max-height:65vh; }
+  #lb-img{ border-radius:10px; }
+  .lb-arrow{ width:36px; height:36px; font-size:18px; }
+  #lb-prev{ left:4px; }
+  #lb-next{ right:4px; }
+  .lb-thumb{ width:50px; height:50px; border-radius:7px; }
+  #lb-bar{ padding:10px 12px; }
+  #lb-close{ width:34px; height:34px; font-size:18px; }
+  #lb-counter{ font-size:.78rem; }
+  #lb-thumbs{ gap:6px; padding:8px 12px 14px; }
+}
+
+/* ── CELULAR MUY ANGOSTO (< 360px) ────────────────────────── */
 @media (max-width:359px){
   .stats{ grid-template-columns:1fr; }
-  .fotos-acciones .btn{ flex:1 1 100%; }
+  .stat{ flex-direction:row; align-items:center; gap:12px; }
+  .wrap{ padding:10px 10px 0; }
 }
 
-/* Tablet en adelante: un poco más de aire */
-@media (min-width:620px){
-  .wrap{ padding:34px 24px 0; }
-  .btn-logout{ width:auto; padding:0 22px; align-self:flex-start; }
+/* ── TABLET (480px – 979px) ────────────────────────────────── */
+@media (min-width:480px) and (max-width:979px){
+  .wrap{ padding:24px 20px 0; }
+  .topbar h1{ font-size:clamp(1.3rem,4vw,1.65rem); }
+  .btn-logout{ width:auto; padding:0 20px; align-self:flex-start; }
+  .stats{ grid-template-columns:repeat(4,1fr); gap:10px; }
+  .grid-form{ grid-template-columns:1fr 1fr; }
+  .grid-form .full{ grid-column:1/-1; }
+  #lb-img-wrap{ padding:60px 50px 16px; }
+  .lb-thumb{ width:56px; height:56px; }
 }
 
-/* Computadora: contenedor más ancho y cómodo */
+/* ── PC / ESCRITORIO (≥ 980px) ─────────────────────────────── */
 @media (min-width:980px){
-  .wrap{ max-width:920px; }
+  .wrap{ max-width:920px; padding:34px 28px 0; }
+  .btn-logout{ width:auto; padding:0 22px; align-self:flex-start; }
+  .stats{ grid-template-columns:repeat(4,1fr); }
   .grid-form{ grid-template-columns:repeat(3,1fr); }
   .grid-form .full{ grid-column:1/-1; }
 }
