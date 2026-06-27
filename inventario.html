@@ -53,7 +53,7 @@
       </div>
     </section>
 
-    <!-- Búsqueda por código de barras -->
+    <!-- Búsqueda por número de equipo -->
     <section class="card">
       <h2 class="card-title">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
@@ -61,7 +61,7 @@
       </h2>
       <p class="card-sub">Ingresa el número de equipo para buscarlo o registrarlo</p>
       <div class="search-row">
-        <input type="text" id="barcode" placeholder="Ingresa el código de barras aquí…" />
+        <input type="text" id="barcode" placeholder="Ingresa el número de equipo aquí…" />
         <button class="btn btn-primary" id="btn-barcode" type="button">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
           Buscar
@@ -86,11 +86,11 @@
         <div class="grid-form">
           <div class="full">
             <label class="fl" for="f-codigo">Número de equipo <span class="req">*</span></label>
-            <input type="text" id="f-codigo" placeholder="Ej: EQ-2024-001" required />
+            <input type="text" id="f-codigo" placeholder="Ej: EQ-1-cbis" required />
           </div>
           <div class="full">
             <label class="fl" for="f-nombre">Nombre del Equipo <span class="req">*</span></label>
-            <input type="text" id="f-nombre" placeholder="Ej: Computadora de Escritorio" required />
+            <input type="text" id="f-nombre" placeholder="Ej: Computadora 1" required />
           </div>
           <div>
             <label class="fl" for="f-marca">Marca</label>
@@ -98,7 +98,7 @@
           </div>
           <div>
             <label class="fl" for="f-modelo">Modelo <span class="req">*</span></label>
-            <input type="text" id="f-modelo" placeholder="Ej: OptiPlex 7090" required />
+            <input type="text" id="f-modelo" placeholder="Ej: Intel" required />
           </div>
           <div>
             <label class="fl" for="f-condicion">Condición Física</label>
