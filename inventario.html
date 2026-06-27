@@ -101,8 +101,14 @@
             <input type="text" id="f-modelo" placeholder="Ej: OptiPlex 7090" required />
           </div>
           <div>
-            <label class="fl" for="f-serie">Número de Serie</label>
-            <input type="text" id="f-serie" placeholder="Ej: SN123456789" />
+            <label class="fl" for="f-condicion">Condición Física</label>
+            <select id="f-condicion">
+              <option value="">Seleccionar condición</option>
+              <option value="excelente">Excelente</option>
+              <option value="bueno">Bueno</option>
+              <option value="regular">Regular</option>
+              <option value="malo">Malo</option>
+            </select>
           </div>
           <div>
             <label class="fl" for="f-categoria">Categoría <span class="req">*</span></label>
@@ -223,6 +229,18 @@
         </table>
       </div>
     </section>
+  </div>
+
+  <!-- ════════════ LIGHTBOX DE FOTOS ════════════ -->
+  <div id="lightbox" aria-hidden="true">
+    <div id="lb-bar">
+      <span id="lb-counter">0 / 0</span>
+      <button id="lb-close" type="button" aria-label="Cerrar">&times;</button>
+    </div>
+    <button id="lb-prev" class="lb-arrow" type="button" aria-label="Anterior">&#8249;</button>
+    <div id="lb-img-wrap"><img id="lb-img" src="" alt="Foto del equipo" /></div>
+    <button id="lb-next" class="lb-arrow" type="button" aria-label="Siguiente">&#8250;</button>
+    <div id="lb-thumbs"></div>
   </div>
 
   <script type="module" src="inventario.js"></script>
