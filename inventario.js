@@ -134,20 +134,49 @@ $("#f-camara").addEventListener("change", async e => { await agregarFotos(e.targ
 $("#f-galeria").addEventListener("change", async e => { await agregarFotos(e.target.files); e.target.value=""; });
 /* El click en fotos-grid (quitar + lightbox) se maneja al final del archivo */
 
+/* ---- Ubicación con caso especial "Cómputo → Mesa" ---- */
+const ES_COMPUTO = "COMPUTO";
+
+function toggleMesa(){
+  const esComputo = $("#f-ubicacion").value === ES_COMPUTO;
+  $("#f-mesa").classList.toggle("show", esComputo);
+  if(!esComputo) $("#f-mesa").value = "";
+}
+
+function ubicacionFinal(){
+  if($("#f-ubicacion").value === ES_COMPUTO){
+    const m = $("#f-mesa").value;
+    return m ? `Cómputo · ${m}` : "Cómputo";
+  }
+  return $("#f-ubicacion").value;
+}
+
+function setUbicacion(valor){
+  if((valor||"").startsWith("Cómputo")){
+    $("#f-ubicacion").value = ES_COMPUTO;
+    $("#f-mesa").value = (valor.split("·")[1] || "").trim();
+  }else{
+    $("#f-ubicacion").value = valor || "";  // si no coincide, queda en "Seleccionar…"
+  }
+  toggleMesa();
+}
+
+$("#f-ubicacion").addEventListener("change", toggleMesa);
+
 /* ---- Leer / escribir formulario ---- */
 function leerForm(){
   return {
     codigo:$("#f-codigo").value.trim(), nombre:$("#f-nombre").value.trim(),
     marca:$("#f-marca").value.trim(), modelo:$("#f-modelo").value.trim(),
     serie:$("#f-serie").value.trim(), categoria:$("#f-categoria").value,
-    ubicacion:$("#f-ubicacion").value.trim(), estado:$("#f-estado").value,
+    ubicacion: ubicacionFinal(), estado:$("#f-estado").value,
     perifericos:$("#f-perifericos").value.trim(), descripcion:$("#f-descripcion").value.trim()
   };
 }
 function escribirForm(e){
   $("#f-codigo").value=e.codigo; $("#f-nombre").value=e.nombre; $("#f-marca").value=e.marca||"";
   $("#f-modelo").value=e.modelo; $("#f-serie").value=e.serie||""; $("#f-categoria").value=e.categoria||"";
-  $("#f-ubicacion").value=e.ubicacion||""; $("#f-estado").value=e.estado;
+  setUbicacion(e.ubicacion||""); $("#f-estado").value=e.estado;
   $("#f-perifericos").value=e.perifericos||""; $("#f-descripcion").value=e.descripcion||"";
   fotos = Array.isArray(e.fotos) ? [...e.fotos] : []; pintarFotos();
 }
@@ -155,6 +184,7 @@ function escribirForm(e){
 function modoCrear(){
   editandoId=null; $("#form").reset(); $("#f-estado").value="activo";
   fotos = []; pintarFotos();
+  toggleMesa();   // oculta el selector de mesa al limpiar
   $("#form-title-text").textContent="Registrar Nuevo Equipo";
   $("#btn-save-text").textContent="Guardar Equipo";
   $("#edit-banner").classList.remove("show");
