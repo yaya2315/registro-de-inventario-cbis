@@ -168,14 +168,14 @@ function leerForm(){
   return {
     codigo:$("#f-codigo").value.trim(), nombre:$("#f-nombre").value.trim(),
     marca:$("#f-marca").value.trim(), modelo:$("#f-modelo").value.trim(),
-    serie:$("#f-serie").value.trim(), categoria:$("#f-categoria").value,
+    condicion:$("#f-condicion").value, categoria:$("#f-categoria").value,
     ubicacion: ubicacionFinal(), estado:$("#f-estado").value,
     perifericos:$("#f-perifericos").value.trim(), descripcion:$("#f-descripcion").value.trim()
   };
 }
 function escribirForm(e){
   $("#f-codigo").value=e.codigo; $("#f-nombre").value=e.nombre; $("#f-marca").value=e.marca||"";
-  $("#f-modelo").value=e.modelo; $("#f-serie").value=e.serie||""; $("#f-categoria").value=e.categoria||"";
+  $("#f-modelo").value=e.modelo; $("#f-condicion").value=e.condicion||""; $("#f-categoria").value=e.categoria||"";
   setUbicacion(e.ubicacion||""); $("#f-estado").value=e.estado;
   $("#f-perifericos").value=e.perifericos||""; $("#f-descripcion").value=e.descripcion||"";
   fotos = Array.isArray(e.fotos) ? [...e.fotos] : []; pintarFotos();
