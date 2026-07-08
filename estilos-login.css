@@ -1,0 +1,127 @@
+/* ════════════════════════════════════════════════════════════
+   ESTILOS LOGIN · cbis
+   Componentes propios de la pantalla de inicio de sesión.
+   (Carga después de estilos-base.css)
+   ════════════════════════════════════════════════════════════ */
+
+/* La marca usa esquinas un poco más redondeadas en esta pantalla */
+:root{ --radius:16px; --radius-lg:22px; }
+
+body{ display:grid; place-items:center; padding:32px 20px; }
+
+main{
+  position:relative; z-index:1; width:100%; max-width:430px;
+  display:flex; flex-direction:column; align-items:center; gap:8px;
+}
+
+/* Marca */
+.brand{ display:flex; flex-direction:column; align-items:center; text-align:center; gap:6px; margin-bottom:26px; animation:rise .7s var(--ease) both; }
+.logo{ height:88px; width:auto; max-width:240px; object-fit:contain; filter:drop-shadow(0 10px 24px rgba(0,0,0,.35)); margin-bottom:10px; }
+h1{
+  font-size:clamp(1.55rem,6vw,1.95rem); font-weight:700; letter-spacing:-.02em; line-height:1.12;
+  background:linear-gradient(180deg,#fff,#e3d8ff); -webkit-background-clip:text; background-clip:text; color:transparent;
+}
+.subtitle{ font-size:.95rem; color:var(--txt-soft); font-weight:500; letter-spacing:.01em; }
+
+/* Tarjeta del formulario */
+.card{
+  width:100%; background:var(--card-bg); border:1px solid var(--card-border); border-radius:var(--radius-lg);
+  padding:30px 26px 26px; backdrop-filter:blur(22px) saturate(140%); -webkit-backdrop-filter:blur(22px) saturate(140%);
+  box-shadow:0 24px 60px -20px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.08);
+  animation:rise .7s .08s var(--ease) both;
+}
+.card h2{ font-size:1.3rem; font-weight:600; text-align:center; letter-spacing:-.01em; margin-bottom:22px; }
+
+/* Campos con icono */
+.field{ margin-bottom:16px; }
+.field label{ display:block; font-size:.82rem; font-weight:500; color:var(--txt-soft); margin-bottom:7px; letter-spacing:.01em; }
+.control{ position:relative; display:flex; align-items:center; }
+.control svg.lead{ position:absolute; left:14px; width:18px; height:18px; color:var(--txt-muted); pointer-events:none; }
+.control input{
+  width:100%; height:50px; padding:0 14px 0 44px; font-size:.95rem; color:var(--txt);
+  background:var(--field-bg); border:1px solid var(--field-border); border-radius:var(--radius); outline:none;
+  transition:border-color .2s var(--ease), box-shadow .2s var(--ease), background .2s var(--ease);
+}
+.control input::placeholder{ color:var(--txt-muted); }
+.control input:hover{ border-color:rgba(255,255,255,.22); }
+.control input:focus{ border-color:var(--violet); background:rgba(255,255,255,.07); box-shadow:0 0 0 4px rgba(123,79,240,.22); }
+
+.toggle{
+  position:absolute; right:8px; display:grid; place-items:center; width:36px; height:36px;
+  border:none; background:transparent; cursor:pointer; color:var(--txt-muted); border-radius:10px;
+  transition:color .2s, background .2s;
+}
+.toggle:hover{ color:var(--txt-soft); background:rgba(255,255,255,.06); }
+.toggle svg{ width:19px; height:19px; }
+
+/* Mensaje */
+.message{
+  font-size:.85rem; font-weight:500; padding:0 2px; margin:-4px 0 14px;
+  max-height:0; opacity:0; overflow:hidden;
+  transition:max-height .3s var(--ease), opacity .3s var(--ease), margin .3s var(--ease);
+}
+.message.show{ max-height:60px; opacity:1; margin:-4px 0 16px; }
+.message.err{ color:var(--err); }
+.message.ok{ color:var(--ok); }
+
+/* Botón principal */
+.btn{
+  width:100%; height:52px; border:none; border-radius:var(--radius); font-size:1rem; font-weight:600;
+  letter-spacing:.01em; color:#fff; cursor:pointer; position:relative;
+  display:flex; align-items:center; justify-content:center; gap:10px;
+  background:linear-gradient(135deg, var(--violet) 0%, var(--violet-strong) 100%);
+  box-shadow:0 12px 30px -10px rgba(123,79,240,.65), inset 0 1px 0 rgba(255,255,255,.25);
+  transition:transform .18s var(--ease), box-shadow .18s var(--ease), filter .18s var(--ease);
+}
+.btn:hover{ transform:translateY(-2px); filter:brightness(1.06); box-shadow:0 18px 38px -12px rgba(123,79,240,.75), inset 0 1px 0 rgba(255,255,255,.25); }
+.btn:active{ transform:translateY(0); }
+.btn:focus-visible{ outline:none; box-shadow:0 0 0 4px rgba(123,79,240,.4); }
+.btn[disabled]{ cursor:wait; filter:saturate(.7) brightness(.95); transform:none; }
+
+.spinner{ width:18px; height:18px; border:2.5px solid rgba(255,255,255,.35); border-top-color:#fff; border-radius:50%; animation:spin .7s linear infinite; display:none; }
+.btn.loading .spinner{ display:block; }
+.btn.loading .label{ display:none; }
+
+.footnote{ display:flex; align-items:center; justify-content:center; gap:6px; margin-top:18px; font-size:.8rem; color:var(--txt-muted); }
+.footnote svg{ width:14px; height:14px; }
+
+.demo-tag{ margin-top:22px; font-size:.72rem; color:var(--txt-muted); text-align:center; opacity:.75; z-index:1; }
+.demo-tag b{ color:var(--gold); font-weight:600; }
+/* ══════════════════════════════════════════════════════════════
+   RESPONSIVE LOGIN
+   ══════════════════════════════════════════════════════════════ */
+
+/* Celular (< 480px) */
+@media (max-width:479px){
+  body{ padding:20px 14px; }
+  main{ gap:4px; }
+
+  .brand{ margin-bottom:18px; gap:4px; }
+  .logo{ height:66px; margin-bottom:6px; }
+  h1{ font-size:1.3rem; }
+  .subtitle{ font-size:.85rem; }
+
+  .card{ padding:22px 16px 20px; border-radius:18px; }
+  .card h2{ font-size:1.1rem; margin-bottom:16px; }
+
+  .field{ margin-bottom:13px; }
+  .field label{ font-size:.78rem; margin-bottom:5px; }
+  .control input{ height:46px; font-size:.88rem; }
+
+  .btn{ height:46px; font-size:.92rem; }
+  .footnote{ font-size:.74rem; margin-top:14px; }
+  .demo-tag{ font-size:.68rem; margin-top:16px; }
+}
+
+/* Celular muy angosto (< 360px) */
+@media (max-width:359px){
+  body{ padding:14px 10px; }
+  .logo{ height:54px; }
+  h1{ font-size:1.15rem; }
+  .card{ padding:18px 13px 16px; }
+}
+
+/* Tablet y PC: sin cambios, el diseño base ya es correcto */
+@media (min-width:480px){
+  body{ padding:40px 24px; }
+}
