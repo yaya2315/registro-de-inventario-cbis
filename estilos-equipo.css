@@ -73,6 +73,18 @@
 }
 .login-gate .ico-candado svg{ width:21px; height:21px; }
 .login-gate p{ font-size:.87rem; color:var(--txt-soft); max-width:360px; line-height:1.5; }
+.login-gate form{ width:100%; max-width:320px; text-align:left; margin-top:4px; display:flex; flex-direction:column; gap:14px; }
+.campo-login label{ display:block; font-size:.78rem; font-weight:600; color:var(--txt-soft); margin-bottom:6px; letter-spacing:.01em; }
+.login-gate .btn{ width:100%; }
+.login-gate .msg{ margin:-4px 0 0; }
+
+/* Botón discreto para volver a bloquear las acciones de administrador sin cerrar la página */
+.salir-admin{
+  display:block; margin:0 auto 4px; padding:8px 4px; background:none; border:none;
+  color:var(--txt-muted); font-size:.8rem; font-weight:500; cursor:pointer; text-decoration:underline;
+  text-underline-offset:3px; transition:color .18s var(--ease);
+}
+.salir-admin:hover{ color:#fff; }
 
 /* Espaciado entre tarjetas de la ficha */
 #ficha > .card{ margin-bottom:18px; }
