@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Ficha pública de equipo · Inventario y Registro de Equipo de cbis." />
+  <meta name="theme-color" content="#3d2570" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Ficha de Equipo · cbis</title>
+
+  <link rel="icon" href="Imagenes/Cbis_transparente.png" />
+  <link rel="stylesheet" href="estilos-base.css" />
+  <link rel="stylesheet" href="estilos-equipo.css" />
+</head>
+<body>
+  <span class="glow g1" aria-hidden="true"></span>
+  <span class="glow g2" aria-hidden="true"></span>
+  <span class="glow g3" aria-hidden="true"></span>
+
+  <div class="wrap wrap-equipo">
+    <!-- Encabezado -->
+    <header class="topbar">
+      <img class="logo" src="Imagenes/Cbis_transparente.png" alt="cbis" />
+      <div>
+        <h1>Ficha del Equipo</h1>
+        <p>Inventario y Registro de Equipo</p>
+      </div>
+    </header>
+
+    <!-- Cargando -->
+    <div id="estado-carga" class="card estado-carga" hidden>
+      <div class="spinner-grande" aria-hidden="true"></div>
+      <p>Buscando el equipo…</p>
+    </div>
+
+    <!-- Buscar (cuando se llega sin código en el enlace) -->
+    <div id="estado-busqueda" class="card" hidden>
+      <h2 class="card-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        Buscar Equipo
+      </h2>
+      <p class="card-sub">Escanea el código QR de un equipo o ingresa su número aquí.</p>
+      <div class="search-row">
+        <input type="text" id="input-buscar-equipo" placeholder="Ej: EQ-1-CBIS" />
+        <button class="btn btn-primary" type="button" id="btn-buscar-equipo">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          Buscar
+        </button>
+      </div>
+    </div>
+
+    <!-- No encontrado / eliminado -->
+    <div id="estado-vacio" class="card estado-vacio" hidden>
+      <svg id="estado-vacio-icono" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+      <h2 id="estado-vacio-titulo">Equipo no encontrado</h2>
+      <p id="estado-vacio-texto"></p>
+      <div class="estado-vacio-acciones">
+        <button type="button" class="btn btn-ghost" id="btn-buscar-otro">Buscar otro código</button>
+      </div>
+    </div>
+
+    <!-- Ficha del equipo -->
+    <div id="ficha" hidden>
+
+      <section class="card ficha-hero">
+        <div class="ficha-top">
+          <span class="pill" id="ficha-estado"></span>
+          <span class="ficha-codigo" id="ficha-codigo"></span>
+        </div>
+        <h2 id="ficha-nombre"></h2>
+        <p class="ficha-sub" id="ficha-marca-modelo"></p>
+      </section>
+
+      <section class="card">
+        <h2 class="card-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M3 9h18"/></svg>
+          Detalles del Equipo
+        </h2>
+        <dl class="info-grid" id="info-grid"></dl>
+      </section>
+
+      <section class="card" id="seccion-fotos" hidden>
+        <h2 class="card-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.5-3.5a2 2 0 0 0-2.8 0L6 21"/></svg>
+          Fotografías / Evidencia
+        </h2>
+        <div class="fotos-grid" id="fotos-grid-ficha"></div>
+      </section>
+
+      <section class="card ubicacion-mapa">
+        <h2 class="card-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.9 10.55A9 9 0 1 1 8 3.31"/><path d="M22 4 12 14.01l-3-3"/></svg>
+          Ubicación en el Plantel
+        </h2>
+        <p class="ubicacion-texto" id="ubicacion-texto"></p>
+        <div class="mapa-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 6v16l7-4 8 4 7-4V2l-7 4-8-4-7 4z"/><path d="M8 2v16M16 6v16"/></svg>
+          <p>Próximamente: ubicación exacta de este equipo sobre el croquis del colegio.</p>
+        </div>
+      </section>
+
+      <section class="card qr-card">
+        <h2 class="card-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM21 14v3M14 21h3M21 21v-.01"/></svg>
+          Código QR de este Equipo
+        </h2>
+        <p class="card-sub">Escanéalo para volver a esta ficha, o imprímelo y pégalo en el equipo.</p>
+        <div class="qr-box">
+          <canvas id="qr-canvas"></canvas>
+        </div>
+        <div class="qr-acciones">
+          <button class="btn btn-primary" type="button" id="btn-imprimir-qr">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+            Imprimir etiqueta
+          </button>
+          <button class="btn btn-ghost" type="button" id="btn-descargar-qr">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5M12 15V3"/></svg>
+            Descargar PNG
+          </button>
+        </div>
+      </section>
+
+      <!-- Solo visible para administradores con sesión iniciada -->
+      <section class="card admin-zone" id="admin-zone" hidden>
+        <h2 class="card-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          Acciones de Administrador
+        </h2>
+        <div class="admin-acciones">
+          <button class="btn btn-primary" type="button" id="btn-editar">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4Z"/></svg>
+            Editar equipo
+          </button>
+          <button class="btn btn-ghost btn-peligro" type="button" id="btn-eliminar">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+            Eliminar equipo
+          </button>
+        </div>
+      </section>
+
+      <!-- Visible para quien no ha iniciado sesión -->
+      <section class="card login-gate" id="login-gate">
+        <span class="ico-candado" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        </span>
+        <p>Para editar o eliminar este equipo, inicia sesión con una cuenta de administrador registrada.</p>
+        <a class="btn btn-ghost" href="index.html">Iniciar sesión como administrador</a>
+      </section>
+
+    </div>
+  </div>
+
+  <!-- ════════════ LIGHTBOX DE FOTOS ════════════ -->
+  <div id="lightbox" aria-hidden="true">
+    <div id="lb-bar">
+      <span id="lb-counter">0 / 0</span>
+      <button id="lb-close" type="button" aria-label="Cerrar">&times;</button>
+    </div>
+    <button id="lb-prev" class="lb-arrow" type="button" aria-label="Anterior">&#8249;</button>
+    <div id="lb-img-wrap"><img id="lb-img" src="" alt="Foto del equipo" /></div>
+    <button id="lb-next" class="lb-arrow" type="button" aria-label="Siguiente">&#8250;</button>
+    <div id="lb-thumbs"></div>
+  </div>
+
+  <!-- ════════════ ETIQUETA IMPRIMIBLE (solo visible al imprimir) ════════════ -->
+  <div id="etiqueta-imprimir">
+    <img id="etiqueta-logo" src="Imagenes/Cbis_transparente.png" alt="" />
+    <p id="etiqueta-nombre"></p>
+    <p id="etiqueta-codigo"></p>
+    <div id="etiqueta-qr"></div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.4/build/qrcode.min.js"></script>
+  <script type="module" src="equipo.js"></script>
+</body>
+</html>

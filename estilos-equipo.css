@@ -1,0 +1,106 @@
+@import url("estilos-inventario.css");
+/* ════════════════════════════════════════════════════════════
+   ESTILOS FICHA DE EQUIPO · cbis
+   Página pública a la que apunta el código QR de cada equipo.
+   Reutiliza tarjetas, botones, pills, fotos y el visor de
+   imágenes ya definidos en estilos-inventario.css.
+   (Carga después de estilos-base.css)
+   ════════════════════════════════════════════════════════════ */
+
+.wrap-equipo{ max-width:640px; }
+
+/* ════════════ ESTADOS: cargando / no encontrado / búsqueda ════════════ */
+.estado-carga{ text-align:center; padding:46px 20px; color:var(--txt-soft); }
+.spinner-grande{
+  width:34px; height:34px; margin:0 auto 16px;
+  border:3px solid rgba(255,255,255,.22); border-top-color:var(--violet);
+  border-radius:50%; animation:spin .8s linear infinite;
+}
+.estado-carga p{ font-size:.9rem; }
+
+.estado-vacio{ text-align:center; padding:40px 22px; }
+.estado-vacio svg{ width:38px; height:38px; margin:0 auto 14px; display:block; color:var(--coral); }
+.estado-vacio h2{ font-size:1.15rem; font-weight:650; margin-bottom:8px; letter-spacing:-.01em; }
+.estado-vacio p{ font-size:.88rem; color:var(--txt-soft); margin-bottom:20px; line-height:1.5; }
+.estado-vacio p strong{ color:#fff; }
+.estado-vacio-acciones{ display:flex; justify-content:center; }
+
+/* ════════════ ENCABEZADO DE LA FICHA ════════════ */
+.ficha-hero{ text-align:left; }
+.ficha-top{ display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:12px; }
+.ficha-codigo{ font-size:.8rem; font-weight:600; color:var(--txt-muted); font-variant-numeric:tabular-nums; letter-spacing:.02em; }
+.ficha-hero h2{ font-size:1.4rem; font-weight:700; letter-spacing:-.02em; margin-bottom:5px; line-height:1.2; }
+.ficha-sub{ font-size:.88rem; color:var(--txt-soft); }
+
+/* ════════════ FICHA TÉCNICA ════════════ */
+.info-grid{ display:grid; grid-template-columns:1fr; gap:16px; }
+@media(min-width:560px){ .info-grid{ grid-template-columns:1fr 1fr; } }
+.info-grid .full{ grid-column:1/-1; }
+.info-grid dt{ font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:var(--txt-muted); margin-bottom:5px; }
+.info-grid dd{ font-size:.94rem; color:#fff; font-weight:500; line-height:1.5; white-space:pre-line; }
+
+/* ════════════ UBICACIÓN / CROQUIS (futuro) ════════════ */
+.ubicacion-texto{ font-size:.92rem; color:var(--txt-soft); margin-bottom:14px; }
+.ubicacion-texto strong{ color:#fff; }
+.mapa-placeholder{
+  padding:24px 18px; text-align:center;
+  border:1.5px dashed rgba(180,150,255,.4); border-radius:var(--radius-lg);
+  background:rgba(123,79,240,.07); color:var(--txt-muted);
+}
+.mapa-placeholder svg{ width:26px; height:26px; margin:0 auto 10px; display:block; color:#b69cff; }
+.mapa-placeholder p{ font-size:.82rem; line-height:1.5; max-width:340px; margin:0 auto; }
+
+/* ════════════ QR (dentro de la ficha) ════════════ */
+.qr-card{ text-align:center; }
+.qr-card .card-title, .qr-card .card-sub{ text-align:left; }
+.qr-box{ display:inline-flex; padding:18px; background:#fff; border-radius:18px; box-shadow:0 20px 50px -20px rgba(0,0,0,.6); margin:6px 0 18px; }
+.qr-box canvas{ display:block; border-radius:6px; }
+.qr-acciones{ display:flex; flex-wrap:wrap; gap:10px; justify-content:center; }
+.qr-acciones .btn{ flex:1; min-width:170px; }
+
+/* ════════════ ZONA DE ADMINISTRADOR ════════════ */
+.admin-zone .card-title svg{ color:var(--gold); }
+.admin-acciones{ display:flex; flex-wrap:wrap; gap:12px; }
+.admin-acciones .btn{ flex:1; min-width:170px; }
+.btn-peligro{ color:#ff8a7a; border-color:rgba(229,93,78,.35); }
+.btn-peligro:hover{ background:rgba(229,93,78,.14); border-color:rgba(229,93,78,.5); color:#ffb3a8; }
+
+/* Aviso: hace falta iniciar sesión para editar / eliminar */
+.login-gate{ display:flex; flex-direction:column; align-items:center; text-align:center; gap:12px; padding:28px 22px; }
+.login-gate .ico-candado{
+  width:44px; height:44px; border-radius:12px; display:grid; place-items:center; flex-shrink:0;
+  background:rgba(245,182,20,.15); color:var(--gold);
+}
+.login-gate .ico-candado svg{ width:21px; height:21px; }
+.login-gate p{ font-size:.87rem; color:var(--txt-soft); max-width:360px; line-height:1.5; }
+
+/* Espaciado entre tarjetas de la ficha */
+#ficha > .card{ margin-bottom:18px; }
+#ficha > .card:last-child{ margin-bottom:0; }
+
+/* ════════════ ETIQUETA IMPRIMIBLE ════════════ */
+#etiqueta-imprimir{ display:none; }
+@media print{
+  body > *:not(#etiqueta-imprimir){ display:none !important; }
+  body{ background:#fff !important; padding:0 !important; }
+  #etiqueta-imprimir{
+    display:flex !important; flex-direction:column; align-items:center; gap:9px;
+    width:100%; padding:22px; color:#161022; text-align:center;
+  }
+  #etiqueta-logo{ height:42px; object-fit:contain; }
+  #etiqueta-nombre{ font-size:15px; font-weight:700; margin:0; }
+  #etiqueta-codigo{ font-size:12px; letter-spacing:.05em; color:#555; margin:0 0 4px; font-family:"JetBrains Mono",ui-monospace,monospace; }
+  #etiqueta-qr canvas{ display:block; }
+  @page{ size:80mm 100mm; margin:6mm; }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   RESPONSIVE — celular (< 480px)
+   ══════════════════════════════════════════════════════════════ */
+@media (max-width:479px){
+  .ficha-hero h2{ font-size:1.2rem; }
+  .info-grid{ gap:12px; }
+  .admin-acciones .btn, .qr-acciones .btn{ width:100%; }
+  .mapa-placeholder{ padding:18px 14px; }
+  .login-gate{ padding:22px 16px; }
+}
