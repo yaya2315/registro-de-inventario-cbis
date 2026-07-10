@@ -229,8 +229,37 @@ tbody tr:hover{ background:rgba(255,255,255,.03); }
 .acts{ display:flex; gap:7px; justify-content:flex-end; }
 .icon-btn{ width:34px; height:34px; border-radius:9px; border:1px solid var(--card-border); background:var(--field-bg); display:grid; place-items:center; cursor:pointer; transition:all .18s var(--ease); }
 .icon-btn svg{ width:16px; height:16px; }
+.icon-btn.qr{ color:var(--gold); } .icon-btn.qr:hover{ background:rgba(245,182,20,.16); border-color:rgba(245,182,20,.45); transform:translateY(-1px); }
 .icon-btn.edit{ color:#b69cff; } .icon-btn.edit:hover{ background:rgba(123,79,240,.18); border-color:rgba(123,79,240,.45); transform:translateY(-1px); }
 .icon-btn.del{ color:#ff8a7a; } .icon-btn.del:hover{ background:rgba(229,93,78,.16); border-color:rgba(229,93,78,.45); transform:translateY(-1px); }
+
+/* ════════════ MODAL: CÓDIGO QR ════════════ */
+.qr-modal-panel{ max-width:420px; text-align:center; }
+.qr-modal-panel .card-title, .qr-modal-panel .card-sub{ text-align:left; }
+.qr-resumen{ display:flex; align-items:center; gap:12px; margin:2px 0 18px; text-align:left; }
+.qr-resumen strong{ display:block; font-size:.95rem; font-weight:650; }
+.qr-resumen span{ display:block; font-size:.8rem; color:var(--txt-muted); font-variant-numeric:tabular-nums; margin-top:1px; }
+.qr-box{ display:inline-flex; padding:18px; background:#fff; border-radius:18px; box-shadow:0 20px 50px -20px rgba(0,0,0,.6); margin-bottom:18px; }
+.qr-box canvas{ display:block; border-radius:6px; }
+.qr-acciones{ display:flex; flex-wrap:wrap; gap:10px; justify-content:center; }
+.qr-acciones .btn{ flex:1; min-width:150px; }
+#msg-qr.msg{ margin-top:16px; text-align:left; }
+
+/* ════════════ ETIQUETA IMPRIMIBLE (código QR físico) ════════════ */
+#etiqueta-imprimir{ display:none; }
+@media print{
+  body > *:not(#etiqueta-imprimir){ display:none !important; }
+  body{ background:#fff !important; padding:0 !important; }
+  #etiqueta-imprimir{
+    display:flex !important; flex-direction:column; align-items:center; gap:9px;
+    width:100%; padding:22px; color:#161022; text-align:center;
+  }
+  #etiqueta-logo{ height:42px; object-fit:contain; }
+  #etiqueta-nombre{ font-size:15px; font-weight:700; margin:0; }
+  #etiqueta-codigo{ font-size:12px; letter-spacing:.05em; color:#555; margin:0 0 4px; font-family:ui-monospace,monospace; }
+  #etiqueta-qr canvas{ display:block; }
+  @page{ size:80mm 100mm; margin:6mm; }
+}
 
 /* ════════════ APARTADO DE FOTOS (evidencia) ════════════ */
 .fotos-acciones{ display:flex; gap:10px; flex-wrap:wrap; }
@@ -413,6 +442,10 @@ tbody tr:hover{ background:rgba(255,255,255,.03); }
   /* Banner edición */
   .edit-banner{ font-size:.8rem; padding:10px 12px; gap:7px; }
   .edit-banner svg{ width:15px; height:15px; }
+
+  /* Modal de código QR */
+  .qr-box{ padding:14px; }
+  .qr-acciones .btn{ width:100%; }
 
   /* Lightbox en celular */
   #lb-img-wrap{ padding:56px 8px 10px; max-height:65vh; }
