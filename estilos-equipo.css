@@ -23,6 +23,10 @@
 .estado-vacio h2{ font-size:1.15rem; font-weight:650; margin-bottom:8px; letter-spacing:-.01em; }
 .estado-vacio p{ font-size:.88rem; color:var(--txt-soft); margin-bottom:20px; line-height:1.5; }
 .estado-vacio p strong{ color:#fff; }
+.estado-vacio p code{
+  background:rgba(255,255,255,.1); border:1px solid var(--card-border); border-radius:5px;
+  padding:1px 6px; font-family:ui-monospace,"JetBrains Mono",monospace; font-size:.82em; color:#e8deff;
+}
 .estado-vacio-acciones{ display:flex; justify-content:center; }
 
 /* ════════════ ENCABEZADO DE LA FICHA ════════════ */
