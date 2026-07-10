@@ -64,7 +64,23 @@ onSnapshot(query(col, orderBy("creado","desc")), snap => {
   cache = ordenarPorCodigo(snap.docs.map(d => ({ id:d.id, ...d.data() })));
   pintarStats();
   pintarTabla($("#search").value);
+  aplicarEditarDesdeUrl();
 });
+
+/* Si se llega con ?editar=codigo (p.ej. desde la ficha pública del QR),
+   abre automáticamente ese equipo en modo edición una sola vez. */
+let editarDesdeUrlAplicado = false;
+function aplicarEditarDesdeUrl(){
+  if(editarDesdeUrlAplicado) return;
+  const cod = new URLSearchParams(location.search).get("editar");
+  if(!cod) return;
+  const eq = DB.buscarPorCodigo(cod);
+  if(eq){
+    editarDesdeUrlAplicado = true;
+    modoEditar(eq);
+    history.replaceState(null, "", location.pathname);
+  }
+}
 
 /* Comprime una imagen a un JPEG pequeño (data URL) para guardarla en Firestore */
 function comprimirImagen(file, maxLado = 1000, calidad = 0.55){
@@ -137,6 +153,7 @@ function pintarTabla(filtro=""){
       <td class="nom" title="${esc(e.nombre)}">${esc(e.nombre)}</td>
       <td><span class="pill ${e.estado}">${ESTADOS[e.estado]||e.estado}</span></td>
       <td><div class="acts">
+        <button class="icon-btn qr" data-qr="${e.id}" aria-label="Ver código QR de ${esc(e.nombre)}" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM21 14v3M14 21h3M21 21v-.01"/></svg></button>
         <button class="icon-btn edit" data-edit="${e.id}" aria-label="Editar ${esc(e.nombre)}" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4Z"/></svg></button>
         <button class="icon-btn del" data-del="${e.id}" aria-label="Eliminar ${esc(e.nombre)}" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg></button>
       </div></td>
@@ -243,6 +260,73 @@ document.addEventListener("keydown", e => {
   if(e.key === "Escape" && formModal.classList.contains("open")) cerrarFormModal();
 });
 
+/* ═══════════════════════════════════════════════════════════════
+   CÓDIGO QR DEL EQUIPO
+   ═══════════════════════════════════════════════════════════════ */
+const qrModal = $("#qr-modal");
+let equipoQrActual = null;
+
+/* Enlace absoluto a la ficha pública de este equipo (equipo.html) */
+function urlDeEquipo(codigo){
+  return `${new URL("equipo.html", location.href).href}?codigo=${encodeURIComponent(codigo)}`;
+}
+
+function pintarQR(equipo){
+  equipoQrActual = equipo;
+  $("#qr-nombre").textContent = equipo.nombre || "";
+  $("#qr-codigo").textContent = equipo.codigo || "";
+  $("#qr-pill-estado").textContent = ESTADOS[equipo.estado] || equipo.estado || "";
+  $("#qr-pill-estado").className = `pill ${equipo.estado||""}`;
+  QRCode.toCanvas($("#qr-canvas"), urlDeEquipo(equipo.codigo), {
+    width:220, margin:1, color:{ dark:"#1f1240", light:"#ffffff" }
+  }, err => { if(err) console.error(err); });
+}
+
+function abrirQRModal(equipo){
+  pintarQR(equipo);
+  qrModal.classList.add("open");
+  qrModal.setAttribute("aria-hidden","false");
+  document.body.style.overflow = "hidden";
+}
+function cerrarQRModal(){
+  qrModal.classList.remove("open");
+  qrModal.setAttribute("aria-hidden","true");
+  document.body.style.overflow = "";
+}
+$("#qr-modal-close").addEventListener("click", cerrarQRModal);
+qrModal.addEventListener("click", e => { if(e.target === qrModal) cerrarQRModal(); });
+document.addEventListener("keydown", e => { if(e.key === "Escape" && qrModal.classList.contains("open")) cerrarQRModal(); });
+
+$("#btn-descargar-qr").addEventListener("click", () => {
+  if(!equipoQrActual) return;
+  const a = document.createElement("a");
+  a.href = $("#qr-canvas").toDataURL("image/png");
+  a.download = `QR-${equipoQrActual.codigo}.png`;
+  a.click();
+});
+
+$("#btn-copiar-enlace").addEventListener("click", async () => {
+  if(!equipoQrActual) return;
+  try{
+    await navigator.clipboard.writeText(urlDeEquipo(equipoQrActual.codigo));
+    aviso("#msg-qr","✓ Enlace copiado al portapapeles.","ok");
+  }catch(_){
+    aviso("#msg-qr","No se pudo copiar el enlace. Cópialo manualmente desde la barra de direcciones.","err");
+  }
+});
+
+$("#btn-imprimir-qr").addEventListener("click", () => {
+  if(!equipoQrActual) return;
+  $("#etiqueta-nombre").textContent = equipoQrActual.nombre || "";
+  $("#etiqueta-codigo").textContent = equipoQrActual.codigo || "";
+  const cont = $("#etiqueta-qr"); cont.innerHTML = "";
+  const c = document.createElement("canvas");
+  cont.appendChild(c);
+  QRCode.toCanvas(c, urlDeEquipo(equipoQrActual.codigo), { width:180, margin:1 }, err => {
+    if(!err) window.print();
+  });
+});
+
 function modoCrear(){
   editandoId=null; $("#form").reset(); $("#f-estado").value="activo";
   fotos = []; pintarFotos();
@@ -279,9 +363,16 @@ $("#form").addEventListener("submit", async e => {
 
   const btn = $("#btn-save"); btn.disabled = true;
   try{
-    if(editandoId){ await DB.actualizar(editandoId,d); aviso("#msg-form","✓ Equipo actualizado.","ok"); }
-    else{ await DB.crear(d); aviso("#msg-form","✓ Equipo registrado.","ok"); }
-    modoCrear();
+    if(editandoId){
+      await DB.actualizar(editandoId,d);
+      aviso("#msg-form","✓ Equipo actualizado.","ok");
+      modoCrear();
+    }else{
+      const ref = await DB.crear(d);
+      modoCrear();
+      cerrarFormModal();
+      abrirQRModal({ id:ref.id, ...d });   // el QR queda listo para ver o imprimir de inmediato
+    }
   }catch(err){ aviso("#msg-form","Error al guardar: "+err.message,"err"); }
   btn.disabled = false;
 });
@@ -290,7 +381,8 @@ $("#btn-clear").addEventListener("click",()=>{ modoCrear(); aviso("#msg-form","F
 
 /* Editar / Eliminar desde la tabla */
 $("#tbody").addEventListener("click", async e => {
-  const ed=e.target.closest("[data-edit]"), dl=e.target.closest("[data-del]");
+  const ed=e.target.closest("[data-edit]"), dl=e.target.closest("[data-del]"), qr=e.target.closest("[data-qr]");
+  if(qr){ const eq=DB.listar().find(x=>x.id===qr.dataset.qr); if(eq) abrirQRModal(eq); }
   if(ed){ const eq=DB.listar().find(x=>x.id===ed.dataset.edit); if(eq) modoEditar(eq); }
   if(dl){
     const eq=DB.listar().find(x=>x.id===dl.dataset.del);
