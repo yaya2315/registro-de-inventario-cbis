@@ -230,6 +230,47 @@
     </section>
     </div>
 
+    <!-- Código QR del equipo (modal) -->
+    <div class="modal-overlay" id="qr-modal" aria-hidden="true">
+    <section class="card modal-panel qr-modal-panel" role="dialog" aria-modal="true" aria-labelledby="qr-modal-title">
+      <button type="button" class="modal-close" id="qr-modal-close" aria-label="Cerrar">&times;</button>
+      <h2 class="card-title" id="qr-modal-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM21 14v3M14 21h3M21 21v-.01"/></svg>
+        Código QR del Equipo
+      </h2>
+      <p class="card-sub">Escanéalo para ver la ficha del equipo, o imprímelo y pégalo en él.</p>
+
+      <div class="qr-resumen">
+        <span class="pill" id="qr-pill-estado"></span>
+        <div>
+          <strong id="qr-nombre"></strong>
+          <span id="qr-codigo"></span>
+        </div>
+      </div>
+
+      <div class="qr-box">
+        <canvas id="qr-canvas"></canvas>
+      </div>
+
+      <div class="qr-acciones">
+        <button class="btn btn-primary" type="button" id="btn-imprimir-qr">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+          Imprimir etiqueta
+        </button>
+        <button class="btn btn-ghost" type="button" id="btn-descargar-qr">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5M12 15V3"/></svg>
+          Descargar PNG
+        </button>
+        <button class="btn btn-ghost" type="button" id="btn-copiar-enlace">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+          Copiar enlace
+        </button>
+      </div>
+
+      <p class="msg" id="msg-qr" role="status" aria-live="polite"></p>
+    </section>
+    </div>
+
     <!-- Listado de equipos -->
     <section class="card">
       <h2 class="card-title">
@@ -262,6 +303,15 @@
     <div id="lb-thumbs"></div>
   </div>
 
+  <!-- ════════════ ETIQUETA IMPRIMIBLE (solo visible al imprimir) ════════════ -->
+  <div id="etiqueta-imprimir">
+    <img id="etiqueta-logo" src="Imagenes/Cbis_transparente.png" alt="" />
+    <p id="etiqueta-nombre"></p>
+    <p id="etiqueta-codigo"></p>
+    <div id="etiqueta-qr"></div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.4/build/qrcode.min.js"></script>
   <script type="module" src="inventario.js"></script>
 </body>
 </html>
