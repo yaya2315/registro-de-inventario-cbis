@@ -77,7 +77,8 @@ async function buscarYRenderizar(codigo){
   }catch(err){
     console.error(err);
     $("#estado-carga").hidden = true;
-    mostrarNoEncontrado(codigo, true);
+    if(err && err.code === "permission-denied") mostrarSinPermiso(codigo);
+    else mostrarNoEncontrado(codigo, true);
   }
 }
 
@@ -112,6 +113,16 @@ function mostrarEliminado(codigo, nombre){
   $("#estado-vacio-icono").innerHTML = '<path d="M20 6 9 17l-5-5"/>';
   $("#estado-vacio-titulo").textContent = "Equipo eliminado";
   $("#estado-vacio-texto").innerHTML = `<strong>${esc(nombre)}</strong> (${esc(codigo)}) se eliminó correctamente del inventario.`;
+  $("#estado-vacio").hidden = false;
+}
+
+function mostrarSinPermiso(codigo){
+  ocultarTodo();
+  $("#estado-vacio-icono").innerHTML = '<rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>';
+  $("#estado-vacio-titulo").textContent = "Firestore rechazó la lectura";
+  $("#estado-vacio-texto").innerHTML =
+    `Las reglas de seguridad de Firestore no están permitiendo leer el equipo <strong>${esc(codigo)}</strong> sin una sesión iniciada. ` +
+    `Revisa Firebase Console → Firestore Database → Reglas y confirma que la colección <code>equipos</code> permite <code>read</code> público.`;
   $("#estado-vacio").hidden = false;
 }
 
