@@ -5,7 +5,8 @@
    ════════════════════════════════════════════════════════════ */
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
+import { getAuth, signInWithEmailAndPassword, signOut, setPersistence, browserSessionPersistence }
+  from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
 import { getFirestore, collection, query, where, getDocs, doc, deleteDoc }
   from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
@@ -213,12 +214,66 @@ $("#btn-imprimir-qr").addEventListener("click", () => {
 });
 
 /* ═══════════════════════════════════════════════════════════════
-   ZONA DE ADMINISTRADOR (editar / eliminar) — requiere sesión
+   ZONA DE ADMINISTRADOR (editar / eliminar)
+   Por diseño, esta ficha NUNCA confía en una sesión ya activa en
+   otra parte del sitio (p.ej. el panel de inventario): cada vez que
+   se abre la página hay que iniciar sesión aquí explícitamente.
+   La sesión que se crea aquí es solo para esta pestaña (no persiste).
    ═══════════════════════════════════════════════════════════════ */
-onAuthStateChanged(auth, user => {
-  esAdmin = !!user;
-  $("#admin-zone").hidden = !esAdmin;
-  $("#login-gate").hidden = esAdmin;
+const ERRORES_LOGIN = {
+  "auth/invalid-email":          "El correo no tiene un formato válido.",
+  "auth/user-not-found":         "Correo o contraseña incorrectos.",
+  "auth/wrong-password":         "Correo o contraseña incorrectos.",
+  "auth/invalid-credential":     "Correo o contraseña incorrectos.",
+  "auth/too-many-requests":      "Demasiados intentos. Intenta más tarde.",
+  "auth/network-request-failed": "Error de conexión. Verifica tu internet.",
+  "auth/user-disabled":          "Esta cuenta está deshabilitada."
+};
+
+function desbloquearAdmin(){
+  esAdmin = true;
+  $("#admin-zone").hidden = false;
+  $("#login-gate").hidden = true;
+  $("#btn-salir-admin").hidden = false;
+}
+function bloquearAdmin(){
+  esAdmin = false;
+  $("#admin-zone").hidden = true;
+  $("#login-gate").hidden = false;
+  $("#btn-salir-admin").hidden = true;
+}
+
+$("#form-login-ficha").addEventListener("submit", async e => {
+  e.preventDefault();
+  const email = $("#lf-email").value.trim();
+  const clave = $("#lf-password").value;
+  const msg   = $("#msg-login-ficha");
+  const btn   = $("#btn-login-ficha");
+  msg.className = "msg";
+
+  if(!email || !clave){
+    msg.textContent = "Completa correo y contraseña.";
+    msg.className = "msg show err";
+    return;
+  }
+
+  btn.disabled = true; btn.textContent = "Verificando…";
+  try{
+    /* La sesión iniciada aquí vive solo mientras esta pestaña esté abierta */
+    await setPersistence(auth, browserSessionPersistence);
+    await signInWithEmailAndPassword(auth, email, clave);
+    desbloquearAdmin();
+    $("#lf-password").value = "";
+  }catch(err){
+    msg.textContent = ERRORES_LOGIN[err.code] || "Ocurrió un error. Intenta de nuevo.";
+    msg.className = "msg show err";
+  }
+  btn.disabled = false; btn.textContent = "Iniciar sesión";
+});
+
+$("#btn-salir-admin").addEventListener("click", async () => {
+  await signOut(auth);
+  bloquearAdmin();
 });
 
 $("#btn-editar").addEventListener("click", () => {
