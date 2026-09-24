@@ -10,7 +10,7 @@
 
   <link rel="icon" href="Imagenes/Cbis_transparente.png" />
   <link rel="stylesheet" href="estilos-base.css" />
-  <link rel="stylesheet" href="estilos-equipo.css" />
+  <link rel="stylesheet" href="estilos-equipo.css?v=20260924c" />
 </head>
 <body>
   <span class="glow g1" aria-hidden="true"></span>
@@ -219,17 +219,15 @@
     <div id="lb-thumbs"></div>
   </div>
 
-  <!-- ════════════ ETIQUETA IMPRIMIBLE (solo visible al imprimir) ════════════ -->
+  <!-- ════════════ ETIQUETA IMPRIMIBLE (solo visible al imprimir) ════════════
+       Usa la misma imagen (lienzo con la tarjeta morada, QR, estado,
+       ubicación, etc.) que "Descargar imagen", para que imprimir y
+       descargar den exactamente el mismo resultado. -->
   <div id="etiqueta-imprimir">
-    <img id="etiqueta-logo" src="Imagenes/Cbis_transparente.png" alt="" />
-    <p id="etiqueta-nombre"></p>
-    <p id="etiqueta-codigo"></p>
-    <div id="etiqueta-qr"></div>
-    <div id="etiqueta-mapa"><svg id="etiqueta-mapa-svg" viewBox="0 0 10 10"></svg></div>
-    <p id="etiqueta-mapa-txt"></p>
+    <img id="etiqueta-imprimir-img" alt="Etiqueta del equipo con código QR" />
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
-  <script type="module" src="equipo.js"></script>
+  <script type="module" src="equipo.js?v=20260924c"></script>
 </body>
 </html>

@@ -1,4 +1,4 @@
-@import url("estilos-inventario.css");
+@import url("estilos-inventario.css?v=20260924c");
 /* ════════════════════════════════════════════════════════════
    ESTILOS FICHA DE EQUIPO · cbis
    Página pública a la que apunta el código QR de cada equipo.
@@ -87,20 +87,22 @@
 #ficha > .card{ margin-bottom:18px; }
 #ficha > .card:last-child{ margin-bottom:0; }
 
-/* ════════════ ETIQUETA IMPRIMIBLE ════════════ */
+/* ════════════ ETIQUETA IMPRIMIBLE ════════════
+   La imagen es la misma tarjeta (morada, con QR, estado y ubicación) que
+   genera "Descargar imagen" — aquí sólo se centra en la hoja. Al ser una
+   tarjeta ancha (no una etiqueta pequeña cuadrada), se imprime en una
+   hoja normal en vez de forzar un tamaño de etiqueta de 80×100mm, que la
+   recortaba. */
 #etiqueta-imprimir{ display:none; }
 @media print{
   body > *:not(#etiqueta-imprimir){ display:none !important; }
   body{ background:#fff !important; padding:0 !important; }
   #etiqueta-imprimir{
-    display:flex !important; flex-direction:column; align-items:center; gap:9px;
-    width:100%; padding:22px; color:#161022; text-align:center;
+    display:flex !important; align-items:center; justify-content:center;
+    width:100%; padding:14mm;
   }
-  #etiqueta-logo{ height:42px; object-fit:contain; }
-  #etiqueta-nombre{ font-size:15px; font-weight:700; margin:0; }
-  #etiqueta-codigo{ font-size:12px; letter-spacing:.05em; color:#555; margin:0 0 4px; font-family:"JetBrains Mono",ui-monospace,monospace; }
-  #etiqueta-qr canvas{ display:block; }
-  @page{ size:80mm 100mm; margin:6mm; }
+  #etiqueta-imprimir-img{ max-width:100%; height:auto; }
+  @page{ margin:10mm; }
 }
 
 /* ══════════════════════════════════════════════════════════════

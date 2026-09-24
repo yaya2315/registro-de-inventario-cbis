@@ -9,7 +9,7 @@ import { getAuth, signInWithEmailAndPassword, signOut, setPersistence, browserSe
   from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
 import { getFirestore, collection, query, where, getDocs, doc, deleteDoc, updateDoc }
   from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
-import { NIVELES, crearVisorPlano, montarPestanasNiveles, textoUbicacion, dibujarPlanoEstatico }
+import { NIVELES, crearVisorPlano, montarPestanasNiveles, textoUbicacion }
   from "./plano-equipos.js?v=20260924c"; // ← sube este número cada vez que cambie plano-equipos.js: los navegadores cachean agresivamente los módulos ES y si no, se sigue viendo la versión vieja aunque el archivo ya se haya actualizado en el servidor
 
 /* Misma configuración de Firebase que el resto del sitio */
@@ -590,33 +590,36 @@ $("#preview-png-close").addEventListener("click", () => cerrarModal($("#preview-
 $("#preview-png-modal").addEventListener("click", e => { if(e.target === $("#preview-png-modal")) cerrarModal($("#preview-png-modal")); });
 document.addEventListener("keydown", e => { if(e.key === "Escape" && $("#preview-png-modal").classList.contains("open")) cerrarModal($("#preview-png-modal")); });
 
-$("#btn-imprimir-qr").addEventListener("click", () => {
+/* "Imprimir etiqueta" usa el mismo lienzo (generarEtiquetaCanvas) que
+   "Descargar imagen", para que ambas den exactamente el mismo resultado
+   — antes armaba una etiqueta aparte, más simple (sin estado, modelo ni
+   ubicación) y con fondo blanco liso. Hay que esperar a que la imagen
+   quede realmente cargada en el <img> antes de imprimir: si se llama a
+   print() justo después de poner el src, algunos navegadores todavía no
+   terminaron de decodificarla y la hoja sale en blanco. */
+$("#btn-imprimir-qr").addEventListener("click", async () => {
   if(!equipoActual) return;
-  $("#etiqueta-nombre").textContent = equipoActual.nombre || "";
-  $("#etiqueta-codigo").textContent = equipoActual.codigo || "";
-  const cont = $("#etiqueta-qr");
-  cont.innerHTML = "";
-  const c = document.createElement("canvas");
-  cont.appendChild(c);
-  pintarMiniMapaEtiqueta(equipoActual);
-  QRCode.toCanvas(c, urlDeEquipo(equipoActual.codigo), { width:180, margin:1 }, err => {
-    if(!err) window.print();
-  });
-});
-
-/* Mini-mapa (pequeño, solo para no ocupar espacio) dentro de la
-   etiqueta imprimible: muestra en qué sala va el equipo. Si el
-   equipo no tiene ubicación asignada en el plano, se oculta. */
-function pintarMiniMapaEtiqueta(equipo){
-  const cont = $("#etiqueta-mapa"), txt = $("#etiqueta-mapa-txt");
-  if(equipo.nivelId && equipo.posX != null && equipo.posY != null){
-    dibujarPlanoEstatico($("#etiqueta-mapa-svg"), equipo.nivelId, { x:equipo.posX, y:equipo.posY }, { radio:5 });
-    txt.textContent = textoUbicacion(equipo.nivelId, equipo.posX, equipo.posY);
-    cont.hidden = false; txt.hidden = false;
-  }else{
-    cont.hidden = true; txt.hidden = true;
+  const btn = $("#btn-imprimir-qr");
+  const textoOriginal = btn.innerHTML;
+  btn.disabled = true;
+  btn.textContent = "Preparando…";
+  try{
+    const canvas = await generarEtiquetaCanvas(equipoActual);
+    const img = $("#etiqueta-imprimir-img");
+    await new Promise((resolve, reject) => {
+      img.onload = resolve;
+      img.onerror = reject;
+      img.src = canvas.toDataURL("image/png");
+    });
+    window.print();
+  }catch(err){
+    console.error(err);
+    alert("No se pudo preparar la etiqueta para imprimir. Intenta de nuevo.");
+  }finally{
+    btn.disabled = false;
+    btn.innerHTML = textoOriginal;
   }
-}
+});
 
 /* ═══════════════════════════════════════════════════════════════
    ZONA DE ADMINISTRADOR (editar / eliminar)
