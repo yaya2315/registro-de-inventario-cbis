@@ -260,7 +260,16 @@ function construirContenido(nivel, { resaltarSalaId, marcador, mostrarRotulos = 
       g += `<rect class="peq-mesa-rect" x="${ms.x}" y="${ms.y}" width="${ms.w}" height="${ms.h}"/>`;
       g += `<rect class="peq-mesa-hit" x="${ms.x}" y="${ms.y}" width="${ms.w}" height="${ms.h}" role="button" tabindex="0" aria-label="Mesa ${esc(ms.letra)}"><title>Mesa ${esc(ms.letra)}</title></rect>`;
       g += `<rect class="peq-mesa-outline" x="${ms.x}" y="${ms.y}" width="${ms.w}" height="${ms.h}"/>`;
-      g += `<text class="peq-mesa-letra" x="${cx.toFixed(3)}" y="${(cy+fs*0.34).toFixed(3)}" font-size="${fs.toFixed(3)}">${esc(ms.letra)}</text>`;
+      /* La letra de la mesa se dibuja en metros (crece con el zoom igual
+         que la mesa), mientras que el pin se contra-escala para mantener
+         su tamaño en pantalla — así que en la mesa que YA tiene el pin
+         puesto, al acercar mucho el zoom la letra terminaba asomando por
+         encima del pin encogido (el "borde blanco" pegado al punto). Como
+         el pin ya deja claro cuál es la mesa elegida, se omite su letra
+         para no competir con él. */
+      if(ms.id !== mesaResaltadaId){
+        g += `<text class="peq-mesa-letra" x="${cx.toFixed(3)}" y="${(cy+fs*0.34).toFixed(3)}" font-size="${fs.toFixed(3)}">${esc(ms.letra)}</text>`;
+      }
       g += `</g>`;
     });
     g += `</g>`;
