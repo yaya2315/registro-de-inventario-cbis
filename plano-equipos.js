@@ -142,22 +142,48 @@ export const NIVELES = [
 
 /* Algunas salas se subdividen en "mesas" (agrupaciones de escritorios) donde
    también se puede registrar un equipo con precisión — por ahora sólo el
-   Centro de Computación, según el levantamiento fotográfico del salón:
-   una mesa central (la "A") y tres bancos de monitores contra las paredes. */
+   Centro de Computación. Corregido según croquis del propio usuario sobre
+   el salón real: la mesa central ("A"), dos bancos angostos contra la pared
+   de entrada (el rincón "E" y el banco "C", separados por un muro/mueble
+   real que no aparece en el plano de AutoCAD), un banco corto en la pared
+   izquierda ("B"), uno en la pared derecha ("F") y uno en la pared del
+   fondo ("D") — dejando libre la esquina inferior izquierda, que es una
+   zona bloqueada (muro/almacenaje) y no piso útil. */
 const MESAS_POR_SALA = {
   "centro-computo":[
     { id:"mesa-a", letra:"A", nombre:"Mesa A", x:18.00, y:1.75, w:3.50, h:1.60 }, // mesa central
-    { id:"mesa-b", letra:"B", nombre:"Mesa B", x:14.84, y:0.15, w:1.00, h:4.91 }, // banco pared izquierda
-    { id:"mesa-c", letra:"C", nombre:"Mesa C", x:15.84, y:0.15, w:7.84, h:1.00 }, // banco pared de entrada
-    { id:"mesa-d", letra:"D", nombre:"Mesa D", x:15.84, y:4.06, w:7.84, h:1.00 }  // banco pared del fondo
+    { id:"mesa-b", letra:"B", nombre:"Mesa B", x:14.84, y:0.90, w:1.00, h:2.75 }, // banco pared izquierda, baja hasta la zona bloqueada
+    { id:"mesa-c", letra:"C", nombre:"Mesa C", x:18.55, y:0.15, w:3.90, h:0.90 }, // banco pared de entrada (a la derecha del muro)
+    { id:"mesa-d", letra:"D", nombre:"Mesa D", x:17.85, y:4.06, w:2.72, h:1.00 }, // banco pared del fondo, empieza en la zona bloqueada
+    { id:"mesa-e", letra:"E", nombre:"Mesa E", x:15.84, y:0.15, w:2.00, h:0.90 }, // escritorio rincón sup. izquierdo (a la izq. del muro)
+    { id:"mesa-f", letra:"F", nombre:"Mesa F", x:22.90, y:0.40, w:0.78, h:2.10 }  // banco pared derecha
   ]
+};
+
+/* Muros/particiones reales que no están en el plano de AutoCAD pero sí en
+   el salón (por eso sólo se dibujan, sin afectar los muros del envelope
+   general), y puntos de interés que NO son mesas de equipo (como el
+   escritorio del profesor) — sólo se muestran cuando la sala está enfocada. */
+const MUROS_INTERNOS_POR_SALA = {
+  "centro-computo":[ { x1:17.85, y1:0.15, x2:17.85, y2:1.55 } ] // separa la mesa E del banco C
+};
+const ZONAS_BLOQUEADAS_POR_SALA = {
+  "centro-computo":[ { x:14.84, y:3.65, w:3.01, h:1.41 } ] // rincón inf. izquierdo: muro/almacenaje, no es piso útil
+};
+const PUNTOS_INTERES_POR_SALA = {
+  "centro-computo":[ { x:21.46, y:4.56, etiqueta:"Profesor" } ]
 };
 
 /* Prepara .rooms una sola vez (objetos en vez de tuplas) */
 NIVELES.forEach(n=>{
   if(n.rooms) return;
   n.rooms = n.r.map(([id,nombre,k,x,y,w,h]) => ({id,nombre,k,x,y,w,h}));
-  n.rooms.forEach(rm=>{ if(MESAS_POR_SALA[rm.id]) rm.mesas = MESAS_POR_SALA[rm.id]; });
+  n.rooms.forEach(rm=>{
+    if(MESAS_POR_SALA[rm.id]) rm.mesas = MESAS_POR_SALA[rm.id];
+    if(MUROS_INTERNOS_POR_SALA[rm.id]) rm.murosInternos = MUROS_INTERNOS_POR_SALA[rm.id];
+    if(ZONAS_BLOQUEADAS_POR_SALA[rm.id]) rm.zonasBloqueadas = ZONAS_BLOQUEADAS_POR_SALA[rm.id];
+    if(PUNTOS_INTERES_POR_SALA[rm.id]) rm.puntosInteres = PUNTOS_INTERES_POR_SALA[rm.id];
+  });
 });
 
 export function buscarNivel(nivelId){
@@ -210,6 +236,17 @@ function construirContenido(nivel, { resaltarSalaId, marcador, mostrarRotulos = 
   });
   g += `</g>`;
 
+  /* Zonas bloqueadas (muro/almacenaje real que no es piso útil, aunque el
+     plano de AutoCAD no lo distinga) — se pintan detrás de las mesas, sólo
+     con la sala enfocada. */
+  if(salaEnfocada && salaEnfocada.zonasBloqueadas){
+    g += `<g class="peq-bloqueado">`;
+    salaEnfocada.zonasBloqueadas.forEach(z=>{
+      g += `<rect class="peq-bloqueado-rect" x="${z.x}" y="${z.y}" width="${z.w}" height="${z.h}"/>`;
+    });
+    g += `</g>`;
+  }
+
   /* Mesas de la sala actualmente enfocada (zoom activo sobre ella) — se
      dibujan sólo cuando está enfocada, para no saturar la vista completa
      del nivel con subdivisiones que sólo importan de cerca. */
@@ -225,6 +262,30 @@ function construirContenido(nivel, { resaltarSalaId, marcador, mostrarRotulos = 
       g += `<rect class="peq-mesa-outline" x="${ms.x}" y="${ms.y}" width="${ms.w}" height="${ms.h}"/>`;
       g += `<text class="peq-mesa-letra" x="${cx.toFixed(3)}" y="${(cy+fs*0.34).toFixed(3)}" font-size="${fs.toFixed(3)}">${esc(ms.letra)}</text>`;
       g += `</g>`;
+    });
+    g += `</g>`;
+  }
+
+  /* Muros/particiones reales que no aparecen en el plano de AutoCAD, pero
+     sí existen en el salón (p.ej. un mueble o medio muro entre dos mesas) —
+     puramente informativos, encima de las mesas para que se noten. */
+  if(salaEnfocada && salaEnfocada.murosInternos){
+    g += `<g class="peq-muro-interno">`;
+    salaEnfocada.murosInternos.forEach(m=>{
+      g += `<line x1="${m.x1}" y1="${m.y1}" x2="${m.x2}" y2="${m.y2}"/>`;
+    });
+    g += `</g>`;
+  }
+
+  /* Puntos de interés que NO son mesas de equipo (p.ej. el escritorio del
+     profesor) — sólo un rótulo de referencia, no se puede tocar. */
+  if(salaEnfocada && salaEnfocada.puntosInteres){
+    g += `<g class="peq-poi">`;
+    salaEnfocada.puntosInteres.forEach(p=>{
+      g += `<g class="peq-poi-item" transform="translate(${p.x} ${p.y})">
+        <circle class="peq-poi-dot" r="0.32"/>
+        <text class="peq-poi-label" x="0" y="0.72">${esc(p.etiqueta)}</text>
+      </g>`;
     });
     g += `</g>`;
   }

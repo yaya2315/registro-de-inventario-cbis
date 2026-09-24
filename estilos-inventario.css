@@ -283,6 +283,10 @@ tbody tr:hover{ background:rgba(255,255,255,.03); }
   #etiqueta-mapa .peq-mesag.peq-hl .peq-mesa-rect{ fill:#d9cdfb; }
   #etiqueta-mapa .peq-mesag.peq-hl .peq-mesa-outline{ stroke:#6c3fd6; stroke-width:.12; }
   #etiqueta-mapa .peq-mesa-letra{ fill:#161022; }
+  #etiqueta-mapa .peq-bloqueado-rect{ fill:#fbe4e0; stroke:#d9765f; stroke-dasharray:none; }
+  #etiqueta-mapa .peq-muro-interno line{ stroke:#c24b34; }
+  #etiqueta-mapa .peq-poi-dot{ fill:#eee; stroke:#999; }
+  #etiqueta-mapa .peq-poi-label{ fill:#555; }
   #etiqueta-mapa:empty, #etiqueta-mapa[hidden]{ display:none; }
   #etiqueta-mapa-txt{ font-size:10px; color:#666; margin:0; }
   @page{ size:80mm 100mm; margin:6mm; }
@@ -415,6 +419,21 @@ tbody tr:hover{ background:rgba(255,255,255,.03); }
   fill:rgba(255,255,255,.94); font-weight:800; text-anchor:middle; pointer-events:none;
   font-family:"JetBrains Mono",ui-monospace,monospace;
 }
+
+/* Zonas bloqueadas (muro/almacenaje real, no es piso útil) y muros
+   internos que no están en el plano de AutoCAD pero sí en el salón —
+   puramente informativos, coral para diferenciarlos de salas y mesas. */
+.peq-bloqueado-rect{
+  fill:rgba(229,93,78,.10); stroke:rgba(229,93,78,.45); stroke-width:.045; stroke-dasharray:.1 .08;
+  pointer-events:none;
+}
+.peq-muro-interno line{ stroke:var(--coral); stroke-width:.09; stroke-linecap:round; pointer-events:none; }
+
+/* Punto de interés que no es una mesa de equipo (p.ej. escritorio del
+   profesor): sólo referencia visual, no se puede tocar. */
+.peq-poi{ pointer-events:none; }
+.peq-poi-dot{ fill:rgba(255,255,255,.12); stroke:rgba(255,255,255,.5); stroke-width:.05; }
+.peq-poi-label{ fill:rgba(255,255,255,.75); font-size:.34px; font-weight:600; text-anchor:middle; }
 
 .peq-stage{
   position:relative; border-radius:var(--radius-lg); overflow:hidden;
