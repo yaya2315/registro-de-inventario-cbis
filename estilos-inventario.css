@@ -487,7 +487,15 @@ tbody tr:hover{ background:rgba(255,255,255,.03); }
 .ubicacion-chip{ font-size:.85rem; color:var(--txt-soft); line-height:1.4; }
 .ubicacion-chip strong{ display:block; color:#fff; font-size:.92rem; }
 
-.peq-picker-panel{ max-width:760px; }
+/* Esta tarjeta contiene un mapa que se redibuja por completo (innerHTML)
+   en cada toque — combinado con el "backdrop-filter: blur" que traen
+   todas las .card, eso disparaba un bug real de composición en Chrome/
+   Edge sobre Windows: justo al hacer clic aparecía una mancha negra con
+   borde blanco tapando el mapa, que se autocorregía en el siguiente
+   repintado (zoom/paneo). Aislar el <svg> en su propia capa no bastó, así
+   que aquí se quita directamente el desenfoque y se usa un fondo sólido
+   en su lugar — sin blur no hay bug posible. */
+.peq-picker-panel{ max-width:760px; background:rgba(17,9,34,.97); backdrop-filter:none; -webkit-backdrop-filter:none; }
 .peq-picker-panel .peq-stage{ height:min(48vh, 420px); }
 .peq-picker-paso2{ margin-top:14px; }
 .peq-picker-paso2 .peq-stage{ height:min(38vh, 320px); }
@@ -500,6 +508,9 @@ tbody tr:hover{ background:rgba(255,255,255,.03); }
 .peq-picker-confirmacion .txt strong{ color:#fff; }
 
 /* Mapa grande en la ficha del equipo */
+/* Mismo motivo que .peq-picker-panel: sin blur en la tarjeta que envuelve
+   el mapa de la ficha, para evitar el bug de composición del navegador. */
+.ubicacion-mapa{ background:rgba(17,9,34,.97); backdrop-filter:none; -webkit-backdrop-filter:none; }
 .ubicacion-mapa .peq-stage{ height:340px; margin-bottom:12px; }
 .ubicacion-mapa .peq-editar-acciones{ display:flex; flex-wrap:wrap; gap:10px; }
 .ubicacion-mapa .peq-editar-acciones .btn{ flex:1; min-width:180px; }
