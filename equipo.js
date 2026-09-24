@@ -10,7 +10,7 @@ import { getAuth, signInWithEmailAndPassword, signOut, setPersistence, browserSe
 import { getFirestore, collection, query, where, getDocs, doc, deleteDoc, updateDoc }
   from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 import { NIVELES, crearVisorPlano, montarPestanasNiveles, textoUbicacion, dibujarPlanoEstatico }
-  from "./plano-equipos.js?v=20260924b"; // ← sube este número cada vez que cambie plano-equipos.js: los navegadores cachean agresivamente los módulos ES y si no, se sigue viendo la versión vieja aunque el archivo ya se haya actualizado en el servidor
+  from "./plano-equipos.js?v=20260924c"; // ← sube este número cada vez que cambie plano-equipos.js: los navegadores cachean agresivamente los módulos ES y si no, se sigue viendo la versión vieja aunque el archivo ya se haya actualizado en el servidor
 
 /* Misma configuración de Firebase que el resto del sitio */
 const firebaseConfig = {

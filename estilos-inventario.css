@@ -443,6 +443,13 @@ tbody tr:hover{ background:rgba(255,255,255,.03); }
   position:relative; border-radius:var(--radius-lg); overflow:hidden;
   background:rgba(8,4,22,.5); border:1px solid var(--card-border);
   touch-action:none; height:280px;
+  /* Este mapa vive dentro de una tarjeta con backdrop-filter (blur) y su
+     pin cambia de escala en cada paso de zoom — esa combinación es una
+     causa conocida de un bug de composición en Chrome/Edge sobre Windows
+     (con ciertas tarjetas gráficas) donde el contenido se ve como una
+     mancha negra con un borde blanco borroso. Aislarlo en su propia capa
+     de composición (fuera del alcance del blur del padre) evita el bug. */
+  isolation:isolate; transform:translateZ(0); -webkit-transform:translateZ(0);
 }
 .peq-stage svg{ display:block; width:100%; height:100%; }
 .peq-stage.peq-colocable svg{ cursor:crosshair; }

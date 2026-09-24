@@ -335,8 +335,9 @@ function construirContenido(nivel, { resaltarSalaId, marcador, mostrarRotulos = 
        igual que un pin en un mapa: si no se contra-escalara, al acercar
        el zoom hacia una mesa pequeña el halo (fijo en metros) se vería
        enorme y taparía todo a su alrededor. */
+    /* Sin el halo grande: sólo el disco y el punto central — más limpio y
+       con menos superficie de dibujo alrededor del pin. */
     g += `<g class="peq-mk" data-x="${marcador.x}" data-y="${marcador.y}" transform="translate(${marcador.x} ${marcador.y}) scale(${escalaMarcador})">
-      <circle class="peq-mk-halo" r="1.9"/>
       <circle class="peq-mk-disc" r="0.85"/>
       <circle class="peq-mk-dot" r="0.32"/>
     </g>`;
