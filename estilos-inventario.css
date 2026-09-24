@@ -280,8 +280,8 @@ tbody tr:hover{ background:rgba(255,255,255,.03); }
   #etiqueta-mapa .peq-mk-dot{ fill:#161022; }
   #etiqueta-mapa .peq-mesa-rect{ fill:#eaf6f3; }
   #etiqueta-mapa .peq-mesa-outline{ stroke:#8fc9c0; stroke-dasharray:none; }
-  #etiqueta-mapa .peq-mesag.peq-hl .peq-mesa-rect{ fill:#d9cdfb; }
-  #etiqueta-mapa .peq-mesag.peq-hl .peq-mesa-outline{ stroke:#6c3fd6; stroke-width:.12; }
+  #etiqueta-mapa .peq-mesag.peq-hl .peq-mesa-rect{ fill:#fbeec2; }
+  #etiqueta-mapa .peq-mesag.peq-hl .peq-mesa-outline{ stroke:#c8992a; stroke-width:.12; }
   #etiqueta-mapa .peq-mesa-letra{ fill:#161022; }
   #etiqueta-mapa .peq-bloqueado-rect{ fill:#fbe4e0; stroke:#d9765f; stroke-dasharray:none; }
   #etiqueta-mapa .peq-muro-interno line{ stroke:#c24b34; }
@@ -413,8 +413,12 @@ tbody tr:hover{ background:rgba(255,255,255,.03); }
 .peq-mesa-outline{ fill:none; stroke:rgba(69,169,156,.6); stroke-width:.05; stroke-dasharray:.14 .1; transition:stroke .15s, stroke-width .15s, stroke-dasharray .15s; }
 .peq-mesa-hit{ fill:transparent; cursor:pointer; }
 .peq-mesa-hit:hover + .peq-mesa-outline, .peq-mesa-hit:focus-visible + .peq-mesa-outline{ stroke:var(--teal); stroke-width:.09; stroke-dasharray:none; }
-.peq-mesag.peq-hl .peq-mesa-rect{ fill:rgba(123,79,240,.4); }
-.peq-mesag.peq-hl .peq-mesa-outline{ stroke:var(--violet); stroke-width:.1; stroke-dasharray:none; }
+/* La mesa con el pin dentro se resalta en dorado (el mismo tono del
+   marcador), no violeta — así se distingue de un lugar de un vistazo si
+   está "elegido" a nivel de sala (violeta) o si ya tiene el pin exacto
+   puesto encima de una mesa (dorado). */
+.peq-mesag.peq-hl .peq-mesa-rect{ fill:rgba(245,182,20,.32); }
+.peq-mesag.peq-hl .peq-mesa-outline{ stroke:var(--gold); stroke-width:.1; stroke-dasharray:none; }
 .peq-mesa-letra{
   fill:rgba(255,255,255,.94); font-weight:800; text-anchor:middle; pointer-events:none;
   font-family:"JetBrains Mono",ui-monospace,monospace;
@@ -464,7 +468,7 @@ tbody tr:hover{ background:rgba(255,255,255,.03); }
   border:1px solid var(--card-border); background:rgba(20,10,42,.75); color:#fff;
   display:grid; place-items:center; cursor:pointer; transition:background .16s var(--ease);
 }
-.peq-zoom button:hover{ background:rgba(123,79,240,.4); }
+.peq-zoom button:hover{ background:rgba(69,169,156,.45); }
 .peq-zoom svg{ width:16px; height:16px; }
 
 .peq-ayuda{ font-size:.78rem; color:var(--txt-muted); margin-top:10px; line-height:1.5; }

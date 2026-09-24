@@ -222,7 +222,7 @@ const esc = s => String(s??"").replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">
 
 /* Dibuja el contenido (muros, salas, rótulos, marcador) dentro de un <svg> ya
    posicionado; no toca el viewBox — eso lo decide quien llama. */
-function construirContenido(nivel, { resaltarSalaId, marcador, mostrarRotulos = true, salaEnfocada, mesaResaltadaId } = {}){
+function construirContenido(nivel, { resaltarSalaId, marcador, mostrarRotulos = true, salaEnfocada, mesaResaltadaId, escalaMarcador = 1 } = {}){
   let g = `<g class="peq-walls">${nivel.envelope.map(d=>`<path class="peq-envelope" d="${d}"/>`).join("")}</g>`;
 
   g += `<g class="peq-rooms">`;
@@ -320,7 +320,13 @@ function construirContenido(nivel, { resaltarSalaId, marcador, mostrarRotulos = 
   }
 
   if(marcador){
-    g += `<g class="peq-mk" data-x="${marcador.x}" data-y="${marcador.y}" transform="translate(${marcador.x} ${marcador.y})">
+    /* El marcador se contra-escala con escalaMarcador (= ancho de vista
+       actual / ancho del plano completo) para que su tamaño EN PANTALLA
+       se mantenga constante sin importar cuánto zoom tenga la vista —
+       igual que un pin en un mapa: si no se contra-escalara, al acercar
+       el zoom hacia una mesa pequeña el halo (fijo en metros) se vería
+       enorme y taparía todo a su alrededor. */
+    g += `<g class="peq-mk" data-x="${marcador.x}" data-y="${marcador.y}" transform="translate(${marcador.x} ${marcador.y}) scale(${escalaMarcador})">
       <circle class="peq-mk-halo" r="1.9"/>
       <circle class="peq-mk-disc" r="0.85"/>
       <circle class="peq-mk-dot" r="0.32"/>
@@ -383,8 +389,28 @@ export function crearVisorPlano(svgEl, wrapEl, opts = {}){
     const n = nivelActual();
     const sala = estado.marcador ? salaEnPunto(n, estado.marcador.x, estado.marcador.y) : null;
     const mesa = estado.marcador ? mesaEnPunto(sala, estado.marcador.x, estado.marcador.y) : null;
-    svgEl.innerHTML = `<g id="peq-escena">${construirContenido(n, { resaltarSalaId: sala?.id, marcador: estado.marcador, salaEnfocada: salaEnfocadaObj(), mesaResaltadaId: mesa?.id })}</g>`;
+    svgEl.innerHTML = `<g id="peq-escena">${construirContenido(n, { resaltarSalaId: sala?.id, marcador: estado.marcador, salaEnfocada: salaEnfocadaObj(), mesaResaltadaId: mesa?.id, escalaMarcador: escalaMarcadorActual() })}</g>`;
     wire();
+  }
+
+  /* El pin se dibuja en las mismas unidades (metros) que el resto del
+     plano, así que al acercar el zoom se vería crecer sin límite hasta
+     tapar la mesa entera — igual que en un mapa, su tamaño en pantalla
+     debe mantenerse constante. escalaMarcadorActual() da el factor que
+     lo "encoge" en proporción a cuánto se ha acercado la vista respecto
+     al plano completo (1 = plano completo, más pequeño mientras más
+     zoom). posicionarMarcadorDom() vuelve a aplicar esa escala sin
+     reconstruir todo el SVG, para usarla en cada paso de zoom. */
+  function escalaMarcadorActual(){
+    const v = estado.view, m = estado.ajusteMax;
+    return (m && m.w) ? Math.min(1, v.w / m.w) : 1;
+  }
+  function posicionarMarcadorDom(){
+    const mk = svgEl.querySelector(".peq-mk");
+    if(!mk || !estado.marcador) return;
+    const { x, y } = estado.marcador;
+    mk.setAttribute("transform", `translate(${x} ${y}) scale(${escalaMarcadorActual()})`);
+    mk.dataset.x = x; mk.dataset.y = y;
   }
 
   /* Acerca la vista al rectángulo de una sala (con un pequeño margen) y
@@ -486,7 +512,7 @@ export function crearVisorPlano(svgEl, wrapEl, opts = {}){
     const sala = salaEnPunto(n, x, y);
     const mesa = mesaEnPunto(sala, x, y);
     const mk = svgEl.querySelector(".peq-mk");
-    if(mk){ mk.setAttribute("transform", `translate(${x} ${y})`); mk.dataset.x=x; mk.dataset.y=y; }
+    if(mk) posicionarMarcadorDom();
     else construirYPintar();
     svgEl.querySelectorAll(".peq-roomg").forEach(g=>g.classList.toggle("peq-hl", g.dataset.sala === sala?.id));
     svgEl.querySelectorAll(".peq-mesag").forEach(g=>g.classList.toggle("peq-hl", g.dataset.mesa === mesa?.id));
@@ -528,6 +554,7 @@ export function crearVisorPlano(svgEl, wrapEl, opts = {}){
     };
     limitarView();
     aplicarViewBox();
+    posicionarMarcadorDom();
     /* Si alejar (rueda o botón "-") devolvió la vista exactamente al plano
        completo mientras había una sala con mesas enfocada, se sale de ese
        enfoque — si no, el usuario quedaría "atrapado" viendo sólo esa
