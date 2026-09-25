@@ -590,6 +590,37 @@ $("#preview-png-close").addEventListener("click", () => cerrarModal($("#preview-
 $("#preview-png-modal").addEventListener("click", e => { if(e.target === $("#preview-png-modal")) cerrarModal($("#preview-png-modal")); });
 document.addEventListener("keydown", e => { if(e.key === "Escape" && $("#preview-png-modal").classList.contains("open")) cerrarModal($("#preview-png-modal")); });
 
+/* ═══════════════════════════════════════════════════════════════
+   CONFIRMACIÓN — reemplaza el confirm() nativo del navegador por un
+   diálogo con el mismo estilo del resto del sitio.
+   ═══════════════════════════════════════════════════════════════ */
+const confirmModal = $("#confirm-modal");
+const confirmPanel = confirmModal.querySelector(".confirm-modal-panel");
+const confirmIcono = $("#confirm-icono");
+let   resolverConfirm = null;
+const ICONO_CONFIRM_NEUTRAL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 2-3 4"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>';
+const ICONO_CONFIRM_PELIGRO = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>';
+
+function confirmarAccion({ titulo, mensaje, textoAceptar = "Confirmar", peligro = false }){
+  $("#confirm-modal-title").textContent = titulo;
+  $("#confirm-modal-texto").textContent = mensaje;
+  $("#confirm-btn-aceptar").textContent = textoAceptar;
+  confirmPanel.classList.toggle("peligro", peligro);
+  confirmIcono.classList.toggle("peligro", peligro);
+  confirmIcono.innerHTML = peligro ? ICONO_CONFIRM_PELIGRO : ICONO_CONFIRM_NEUTRAL;
+  abrirModal(confirmModal);
+  $("#confirm-btn-aceptar").focus();
+  return new Promise(resolve => { resolverConfirm = resolve; });
+}
+function cerrarConfirm(resultado){
+  cerrarModal(confirmModal);
+  if(resolverConfirm){ resolverConfirm(resultado); resolverConfirm = null; }
+}
+$("#confirm-btn-aceptar").addEventListener("click", ()=> cerrarConfirm(true));
+$("#confirm-btn-cancelar").addEventListener("click", ()=> cerrarConfirm(false));
+confirmModal.addEventListener("click", e => { if(e.target === confirmModal) cerrarConfirm(false); });
+document.addEventListener("keydown", e => { if(e.key === "Escape" && confirmModal.classList.contains("open")) cerrarConfirm(false); });
+
 /* "Imprimir etiqueta" usa el mismo lienzo (generarEtiquetaCanvas) que
    "Descargar imagen", para que ambas den exactamente el mismo resultado
    — antes armaba una etiqueta aparte, más simple (sin estado, modelo ni
@@ -693,7 +724,12 @@ $("#btn-editar").addEventListener("click", () => {
 
 $("#btn-eliminar").addEventListener("click", async () => {
   if(!equipoActual || !esAdmin) return;
-  const ok = confirm(`¿Eliminar "${equipoActual.nombre}" (${equipoActual.codigo})? Esta acción no se puede deshacer.`);
+  const ok = await confirmarAccion({
+    titulo: "Eliminar equipo",
+    mensaje: `¿Eliminar "${equipoActual.nombre}" (${equipoActual.codigo})? Esta acción no se puede deshacer.`,
+    textoAceptar: "Eliminar",
+    peligro: true
+  });
   if(!ok) return;
   try{
     await deleteDoc(doc(fdb, "equipos", equipoActual.id));

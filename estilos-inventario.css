@@ -174,10 +174,11 @@ select optgroup{ background:#1a0d3d; color:var(--txt-muted); font-weight:700; }
 .btn svg{ width:18px; height:18px; }
 .btn-primary{ color:#fff; background:linear-gradient(135deg,var(--violet),var(--violet-strong)); box-shadow:0 8px 20px -10px rgba(99,102,241,.5), inset 0 1px 0 rgba(255,255,255,.16); }
 .btn-primary:hover{ transform:translateY(-2px); filter:brightness(1.06); }
-.btn-primary:active{ transform:translateY(0); }
+.btn-primary:active{ transform:translateY(0) scale(.97); }
 .btn-primary[disabled]{ cursor:wait; filter:saturate(.7) brightness(.95); transform:none; }
 .btn-ghost{ background:transparent; color:var(--txt-soft); border:1px solid var(--card-border); }
 .btn-ghost:hover{ background:var(--field-bg); color:#fff; }
+.btn-ghost:active{ transform:scale(.97); }
 .form-actions{ display:flex; flex-wrap:wrap; gap:12px; margin-top:20px; }
 .form-actions .btn-primary{ flex:1; min-width:180px; }
 
@@ -230,10 +231,16 @@ tbody tr.row-clic:active{ background:rgba(99,102,241,.13); }
 .icon-btn svg{ width:16px; height:16px; }
 .icon-btn.edit{ color:#a5b4fc; } .icon-btn.edit:hover{ background:rgba(99,102,241,.18); border-color:rgba(99,102,241,.45); transform:translateY(-1px); }
 .icon-btn.del{ color:#ff8a7a; } .icon-btn.del:hover{ background:rgba(229,93,78,.16); border-color:rgba(229,93,78,.45); transform:translateY(-1px); }
+.icon-btn:active{ transform:scale(.9); }
 
 /* Chevron discreto al final de la fila: refuerza que toda la fila es clicable */
 .row-clic-chevron{ width:16px; height:16px; margin-left:2px; color:var(--txt-muted); flex-shrink:0; transition:transform .18s var(--ease), color .18s var(--ease); }
 tbody tr.row-clic:hover .row-clic-chevron{ color:var(--violet); transform:translateX(2px); }
+
+/* La fila entra con una pequeña caída/aparición escalonada — da vida al
+   listado sin distraer (recorte del delay para listas largas). */
+@keyframes filaEntra{ from{ opacity:0; transform:translateY(6px); } to{ opacity:1; transform:none; } }
+tbody tr.row-clic{ animation:filaEntra .32s var(--ease) both; animation-delay:calc(min(var(--i, 0), 10) * 26ms); }
 
 /* ════════════ MODAL: CÓDIGO QR ════════════ */
 .qr-modal-panel{ max-width:420px; text-align:center; }
@@ -246,6 +253,33 @@ tbody tr.row-clic:hover .row-clic-chevron{ color:var(--violet); transform:transl
 .qr-acciones{ display:flex; flex-wrap:wrap; gap:10px; justify-content:center; }
 .qr-acciones .btn{ flex:1; min-width:150px; }
 #msg-qr.msg{ margin-top:16px; text-align:left; }
+
+/* Insignia de éxito: el círculo se dibuja y luego la palomita — el mismo
+   lenguaje visual de confirmación de Stripe/Apple Pay, sobrio y satisfactorio
+   a la vez. Se reinicia por JS (quitando/poniendo .play) cada vez que se
+   registra un equipo nuevo, para que la animación se repita en cada uso. */
+.qr-success{ display:flex; justify-content:center; margin:-2px 0 12px; }
+.qr-success-circle{ width:54px; height:54px; overflow:visible; }
+.qr-success-ring{ stroke:var(--ok); stroke-width:2.5; stroke-dasharray:145; stroke-dashoffset:145; }
+.qr-success-check{ stroke:var(--ok); stroke-width:3.5; stroke-linecap:round; stroke-linejoin:round; stroke-dasharray:36; stroke-dashoffset:36; }
+.qr-success-circle.play .qr-success-ring{ animation:qrRingIn .5s var(--ease) forwards; }
+.qr-success-circle.play .qr-success-check{ animation:qrCheckIn .35s var(--ease) .42s forwards; }
+@keyframes qrRingIn{ to{ stroke-dashoffset:0; } }
+@keyframes qrCheckIn{ to{ stroke-dashoffset:0; } }
+
+/* ════════════ MODAL: CONFIRMACIÓN (reemplaza confirm()/alert() nativos) ════════════ */
+.confirm-modal-panel{ max-width:400px; text-align:center; }
+.confirm-icono{
+  width:52px; height:52px; margin:0 auto 14px; border-radius:50%; display:grid; place-items:center;
+  background:rgba(99,102,241,.14); color:var(--violet);
+  animation:confirmIconoIn .4s var(--ease) both;
+}
+.confirm-icono svg{ width:24px; height:24px; }
+@keyframes confirmIconoIn{ from{ opacity:0; transform:scale(.6); } to{ opacity:1; transform:none; } }
+.confirm-modal-panel .qr-acciones{ margin-top:6px; }
+/* Variante destructiva (eliminar): icono y botón de confirmar en coral */
+.confirm-icono.peligro{ background:rgba(229,93,78,.14); color:var(--coral); }
+.confirm-modal-panel.peligro #confirm-btn-aceptar{ background:linear-gradient(135deg,var(--coral),#c8493a); box-shadow:0 8px 20px -10px rgba(229,93,78,.55), inset 0 1px 0 rgba(255,255,255,.16); }
 
 /* ════════════ MODAL: VISTA PREVIA DE LA IMAGEN A DESCARGAR ════════════
    Se abre antes de descargar el PNG: muestra el QR y los datos del

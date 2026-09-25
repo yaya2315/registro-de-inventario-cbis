@@ -134,12 +134,28 @@ function aplicarFiltro(valor){
 botonesFiltro.forEach(btn => btn.addEventListener("click", ()=> aplicarFiltro(btn.dataset.filtro)));
 $("#filtro-quitar").addEventListener("click", ()=> aplicarFiltro(""));
 
+/* Anima un contador de un número al otro (sensación de "tablero vivo" en
+   vez de solo reemplazar el texto) — respeta prefers-reduced-motion porque
+   el .num nunca cambia de valor final, solo la transición visual. */
+function animarNumero(el, valorFinal){
+  const inicio = parseInt(el.textContent, 10) || 0;
+  if(inicio === valorFinal) return;
+  const dur = 500, t0 = performance.now();
+  const paso = now => {
+    const p = Math.min(1, (now - t0) / dur);
+    const ease = 1 - Math.pow(1 - p, 3); // ease-out cúbico
+    el.textContent = Math.round(inicio + (valorFinal - inicio) * ease);
+    if(p < 1) requestAnimationFrame(paso);
+  };
+  requestAnimationFrame(paso);
+}
+
 function pintarStats(){
   const t = DB.listar();
-  $("#st-total").textContent  = t.length;
-  $("#st-activo").textContent = t.filter(e=>e.estado==="activo").length;
-  $("#st-mant").textContent   = t.filter(e=>e.estado==="mantenimiento").length;
-  $("#st-baja").textContent   = t.filter(e=>e.estado==="baja").length;
+  animarNumero($("#st-total"),  t.length);
+  animarNumero($("#st-activo"), t.filter(e=>e.estado==="activo").length);
+  animarNumero($("#st-mant"),   t.filter(e=>e.estado==="mantenimiento").length);
+  animarNumero($("#st-baja"),   t.filter(e=>e.estado==="baja").length);
 }
 
 function pintarTabla(filtro=""){
@@ -149,8 +165,8 @@ function pintarTabla(filtro=""){
     (!f || (e.codigo||"").toLowerCase().includes(f) || (e.nombre||"").toLowerCase().includes(f)));
   const tb = $("#tbody");
   if(!lista.length){ tb.innerHTML = `<tr><td colspan="4" class="empty">No se encontraron equipos${filtroEstado ? ` en “${NOMBRE_FILTRO[filtroEstado]}”` : ""}.</td></tr>`; return; }
-  tb.innerHTML = lista.map(e => `
-    <tr class="row-clic" data-codigo="${esc(e.codigo)}" tabindex="0" role="button" aria-label="Ver ficha completa de ${esc(e.nombre)}">
+  tb.innerHTML = lista.map((e, i) => `
+    <tr class="row-clic" style="--i:${i}" data-codigo="${esc(e.codigo)}" tabindex="0" role="button" aria-label="Ver ficha completa de ${esc(e.nombre)}">
       <td class="cod">${esc(e.codigo)}</td>
       <td class="nom" title="${esc(e.nombre)}">${esc(e.nombre)}</td>
       <td><span class="pill ${e.estado}">${ESTADOS[e.estado]||e.estado}</span></td>
@@ -357,6 +373,12 @@ function abrirQRModal(equipo){
   qrModal.classList.add("open");
   qrModal.setAttribute("aria-hidden","false");
   document.body.style.overflow = "hidden";
+  /* Reinicia la animación de "palomita" cada vez (si no, al abrir el modal
+     una segunda vez la animación ya habría terminado y no se vería). */
+  const circulo = $("#qr-success-circle");
+  circulo.classList.remove("play");
+  void circulo.offsetWidth; // fuerza reflow para poder reiniciar la animación CSS
+  circulo.classList.add("play");
 }
 function cerrarQRModal(){
   qrModal.classList.remove("open");
@@ -366,6 +388,42 @@ function cerrarQRModal(){
 $("#qr-modal-close").addEventListener("click", cerrarQRModal);
 qrModal.addEventListener("click", e => { if(e.target === qrModal) cerrarQRModal(); });
 document.addEventListener("keydown", e => { if(e.key === "Escape" && qrModal.classList.contains("open")) cerrarQRModal(); });
+
+/* ═══════════════════════════════════════════════════════════════
+   CONFIRMACIÓN — reemplaza los confirm()/alert() nativos del navegador
+   por un diálogo con el mismo estilo del resto del sitio.
+   ═══════════════════════════════════════════════════════════════ */
+const confirmModal   = $("#confirm-modal");
+const confirmPanel   = confirmModal.querySelector(".confirm-modal-panel");
+const confirmIcono   = $("#confirm-icono");
+let   resolverConfirm = null;
+
+const ICONO_CONFIRM_NEUTRAL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 2-3 4"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>';
+const ICONO_CONFIRM_PELIGRO = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>';
+
+function confirmarAccion({ titulo, mensaje, textoAceptar = "Confirmar", peligro = false }){
+  $("#confirm-modal-title").textContent = titulo;
+  $("#confirm-modal-texto").textContent = mensaje;
+  $("#confirm-btn-aceptar").textContent = textoAceptar;
+  confirmPanel.classList.toggle("peligro", peligro);
+  confirmIcono.classList.toggle("peligro", peligro);
+  confirmIcono.innerHTML = peligro ? ICONO_CONFIRM_PELIGRO : ICONO_CONFIRM_NEUTRAL;
+  confirmModal.classList.add("open");
+  confirmModal.setAttribute("aria-hidden","false");
+  document.body.style.overflow = "hidden";
+  $("#confirm-btn-aceptar").focus();
+  return new Promise(resolve => { resolverConfirm = resolve; });
+}
+function cerrarConfirm(resultado){
+  confirmModal.classList.remove("open");
+  confirmModal.setAttribute("aria-hidden","true");
+  document.body.style.overflow = "";
+  if(resolverConfirm){ resolverConfirm(resultado); resolverConfirm = null; }
+}
+$("#confirm-btn-aceptar").addEventListener("click", ()=> cerrarConfirm(true));
+$("#confirm-btn-cancelar").addEventListener("click", ()=> cerrarConfirm(false));
+confirmModal.addEventListener("click", e => { if(e.target === confirmModal) cerrarConfirm(false); });
+document.addEventListener("keydown", e => { if(e.key === "Escape" && confirmModal.classList.contains("open")) cerrarConfirm(false); });
 
 /* ═══════════════════════════════════════════════════════════════
    IMAGEN DESCARGABLE: QR + ficha resumida del equipo
@@ -745,9 +803,17 @@ $("#tbody").addEventListener("click", async e => {
   if(ed){ const eq=DB.listar().find(x=>x.id===ed.dataset.edit); if(eq) modoEditar(eq); return; }
   if(dl){
     const eq=DB.listar().find(x=>x.id===dl.dataset.del);
-    if(eq && confirm(`¿Eliminar "${eq.nombre}" (${eq.codigo})?`)){
-      try{ await DB.eliminar(eq.id); if(editandoId===eq.id) modoCrear(); }
-      catch(err){ alert("Error al eliminar: "+err.message); }
+    if(eq){
+      const ok = await confirmarAccion({
+        titulo: "Eliminar equipo",
+        mensaje: `¿Eliminar "${eq.nombre}" (${eq.codigo})? Esta acción no se puede deshacer.`,
+        textoAceptar: "Eliminar",
+        peligro: true
+      });
+      if(ok){
+        try{ await DB.eliminar(eq.id); if(editandoId===eq.id) modoCrear(); }
+        catch(err){ alert("Error al eliminar: "+err.message); }
+      }
     }
     return;
   }
@@ -784,7 +850,12 @@ $("#search").addEventListener("input", e => pintarTabla(e.target.value));
 
 /* Cerrar sesión */
 $("#logout").addEventListener("click", async () => {
-  if(confirm("¿Cerrar sesión?")){ await signOut(auth); location.href="index.html"; }
+  const ok = await confirmarAccion({
+    titulo: "Cerrar sesión",
+    mensaje: "¿Seguro que quieres cerrar tu sesión de administrador?",
+    textoAceptar: "Cerrar sesión"
+  });
+  if(ok){ await signOut(auth); location.href="index.html"; }
 });
 
 /* ═══════════════════════════════════════════════════════════════

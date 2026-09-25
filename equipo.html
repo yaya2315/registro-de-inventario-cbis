@@ -207,6 +207,21 @@
     </section>
   </div>
 
+  <!-- ════════════ CONFIRMACIÓN (reemplaza los diálogos nativos del navegador) ════════════ -->
+  <div class="modal-overlay" id="confirm-modal" aria-hidden="true">
+    <section class="card modal-panel confirm-modal-panel" role="alertdialog" aria-modal="true" aria-labelledby="confirm-modal-title" aria-describedby="confirm-modal-texto">
+      <div class="confirm-icono" id="confirm-icono" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 2-3 4"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      </div>
+      <h2 class="card-title" id="confirm-modal-title" style="justify-content:center"></h2>
+      <p class="card-sub" id="confirm-modal-texto" style="text-align:center"></p>
+      <div class="qr-acciones">
+        <button class="btn btn-ghost" type="button" id="confirm-btn-cancelar">Cancelar</button>
+        <button class="btn btn-primary" type="button" id="confirm-btn-aceptar">Confirmar</button>
+      </div>
+    </section>
+  </div>
+
   <!-- ════════════ LIGHTBOX DE FOTOS ════════════ -->
   <div id="lightbox" aria-hidden="true">
     <div id="lb-bar">
