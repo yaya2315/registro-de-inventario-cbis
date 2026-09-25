@@ -5,16 +5,23 @@
    ════════════════════════════════════════════════════════════ */
 
 :root{
-  /* Paleta de marca cbis */
-  --violet:#7b4ff0; --violet-strong:#5a32c0; --violet-deep:#3d2570;
+  /* Paleta de marca cbis — indigo, no morado: un solo acento serio en
+     vez del violeta-rosado saturado de antes, con menos contraste de
+     tono para verse premium y no "genérico IA". Dorado/teal/magenta/
+     coral se conservan tal cual: son el lenguaje visual ya afinado del
+     plano interactivo (mesas, zonas, estados) y no forman parte de la
+     queja de "mucho morado". */
+  --violet:#6366f1; --violet-strong:#4f46e5; --violet-deep:#312e81;
   --gold:#f5b614; --teal:#45a99c; --magenta:#d6418f; --coral:#e55d4e;
 
-  /* Texto */
-  --txt:#ffffff; --txt-soft:#cdbdf2; --txt-muted:#9a8bc4;
+  /* Texto: grises neutros con solo un matiz de frío, no lavanda saturada */
+  --txt:#ffffff; --txt-soft:#c6c8dc; --txt-muted:#8b8da6;
 
-  /* Superficies */
-  --field-bg:rgba(255,255,255,.05); --field-border:rgba(255,255,255,.12);
-  --card-bg:rgba(255,255,255,.06);  --card-border:rgba(255,255,255,.12);
+  /* Superficies: tarjetas sólidas y planas (sin glassmorphism) — más
+     legibles, más "Linear/Stripe" y de paso eliminan el bug de
+     composición de backdrop-filter que aparecía sobre el mapa */
+  --field-bg:rgba(255,255,255,.04); --field-border:rgba(255,255,255,.12);
+  --card-bg:#121220; --card-border:rgba(255,255,255,.09);
 
   /* Estados */
   --ok:#54d6a5; --err:#ff8a7a;
@@ -42,16 +49,23 @@ body{
   text-rendering:optimizeLegibility;
   position:relative;
   overflow-x:hidden;
-  background:radial-gradient(130% 80% at 50% -5%, #6a44a8 0%, #432a78 40%, #2a1850 76%, #1f1240 100%);
+  /* Fondo casi negro y neutro en vez del degradado morado de punta a
+     punta: un único resplandor sutil arriba basta para dar profundidad
+     sin competir con el contenido — "menos pero mejor". */
+  background:
+    radial-gradient(120% 55% at 50% -10%, rgba(99,102,241,.16) 0%, rgba(99,102,241,0) 60%),
+    #08080d;
   background-attachment:fixed;
 }
 
-/* Orbes de color de la marca (atmósfera) */
-.glow{ position:fixed; border-radius:50%; filter:blur(80px); opacity:.22; pointer-events:none; z-index:0; }
-.glow.g1{ width:340px; height:340px; background:var(--magenta); top:-100px; left:-90px; opacity:.30; }
-.glow.g2{ width:300px; height:300px; background:var(--teal);    bottom:-120px; right:-80px; opacity:.18; }
-.glow.g3{ width:240px; height:240px; background:var(--gold);    top:40%; left:-110px; opacity:.12; }
-.glow.g4{ width:260px; height:260px; background:var(--coral);   top:6%; right:-100px; opacity:.18; }
+/* Orbes de color de la marca (atmósfera): un solo tono (el acento
+   indigo) en vez de cuatro colores distintos compitiendo entre sí —
+   dan profundidad ambiental sin leerse como "ruido" de colores. */
+.glow{ position:fixed; border-radius:50%; filter:blur(90px); background:var(--violet); pointer-events:none; z-index:0; }
+.glow.g1{ width:380px; height:380px; top:-140px; left:-120px; opacity:.12; }
+.glow.g2{ width:320px; height:320px; bottom:-140px; right:-110px; opacity:.08; }
+.glow.g3{ width:260px; height:260px; top:35%;  left:-140px;  opacity:.06; }
+.glow.g4{ width:280px; height:280px; top:4%;   right:-120px; opacity:.07; }
 
 /* Animaciones compartidas */
 @keyframes rise{ from{ opacity:0; transform:translateY(12px); } to{ opacity:1; transform:none; } }

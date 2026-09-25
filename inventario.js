@@ -150,14 +150,14 @@ function pintarTabla(filtro=""){
   const tb = $("#tbody");
   if(!lista.length){ tb.innerHTML = `<tr><td colspan="4" class="empty">No se encontraron equipos${filtroEstado ? ` en “${NOMBRE_FILTRO[filtroEstado]}”` : ""}.</td></tr>`; return; }
   tb.innerHTML = lista.map(e => `
-    <tr>
+    <tr class="row-clic" data-codigo="${esc(e.codigo)}" tabindex="0" role="button" aria-label="Ver ficha completa de ${esc(e.nombre)}">
       <td class="cod">${esc(e.codigo)}</td>
       <td class="nom" title="${esc(e.nombre)}">${esc(e.nombre)}</td>
       <td><span class="pill ${e.estado}">${ESTADOS[e.estado]||e.estado}</span></td>
       <td><div class="acts">
-        <button class="icon-btn qr" data-qr="${e.id}" aria-label="Ver código QR de ${esc(e.nombre)}" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM21 14v3M14 21h3M21 21v-.01"/></svg></button>
         <button class="icon-btn edit" data-edit="${e.id}" aria-label="Editar ${esc(e.nombre)}" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4Z"/></svg></button>
         <button class="icon-btn del" data-del="${e.id}" aria-label="Eliminar ${esc(e.nombre)}" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg></button>
+        <svg class="row-clic-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
       </div></td>
     </tr>`).join("");
 }
@@ -348,7 +348,7 @@ function pintarQR(equipo){
   $("#qr-pill-estado").textContent = ESTADOS[equipo.estado] || equipo.estado || "";
   $("#qr-pill-estado").className = `pill ${equipo.estado||""}`;
   QRCode.toCanvas($("#qr-canvas"), urlDeEquipo(equipo.codigo), {
-    width:220, margin:1, color:{ dark:"#1f1240", light:"#ffffff" }
+    width:220, margin:1, color:{ dark:"#312e81", light:"#ffffff" }
   }, err => { if(err) console.error(err); });
 }
 
@@ -445,7 +445,7 @@ async function trazarPanelInfo(ctx, equipo, x, y, w, dibujar){
   iy += 25;
 
   /* Pill de estado: si funciona o no, sin necesidad de escanear */
-  const info = COLOR_ESTADO_ETIQUETA[equipo.estado] || { fondo:"#e4d9ff", texto:"#2a1850", etiqueta: equipo.estado || "Sin estado" };
+  const info = COLOR_ESTADO_ETIQUETA[equipo.estado] || { fondo:"#e0e7ff", texto:"#312e81", etiqueta: equipo.estado || "Sin estado" };
   const pillTexto = info.etiqueta.toUpperCase();
   ctx.font = "700 11.5px Inter, sans-serif";
   const pillW = ctx.measureText(pillTexto).width + 40;
@@ -540,10 +540,10 @@ async function generarEtiquetaCanvas(equipo){
 
   /* Fondo: el mismo degradado de marca que el resto del sitio */
   const fondo = ctx.createLinearGradient(0, 0, W, H);
-  fondo.addColorStop(0,   "#6a44a8");
-  fondo.addColorStop(.45, "#432a78");
-  fondo.addColorStop(.8,  "#2a1850");
-  fondo.addColorStop(1,   "#1f1240");
+  fondo.addColorStop(0,   "#4f46e5");
+  fondo.addColorStop(.45, "#312e81");
+  fondo.addColorStop(.8,  "#181736");
+  fondo.addColorStop(1,   "#0c0c14");
   ctx.fillStyle = fondo;
   ctx.fillRect(0, 0, W, H);
 
@@ -579,7 +579,7 @@ async function generarEtiquetaCanvas(equipo){
   const qrCanvas = document.createElement("canvas");
   await new Promise((resolve, reject) => {
     QRCode.toCanvas(qrCanvas, urlDeEquipo(equipo.codigo), {
-      width: qrLado, margin: 1, color: { dark: "#1f1240", light: "#ffffff" }
+      width: qrLado, margin: 1, color: { dark: "#312e81", light: "#ffffff" }
     }, err => err ? reject(err) : resolve());
   });
   const qrX = panelQrX + (panelQrW - qrLado) / 2;
@@ -590,10 +590,10 @@ async function generarEtiquetaCanvas(equipo){
   const baseCaption1 = qrY + qrLado + gapCaption + 14; /* +14 ≈ ascenso del texto de 17px */
   const baseCaption2 = baseCaption1 + 17;
   ctx.textAlign = "center";
-  ctx.fillStyle = "#1f1240";
+  ctx.fillStyle = "#312e81";
   ctx.font = "800 17px Inter, sans-serif";
   ctx.fillText("ESCANÉAME", centroX, baseCaption1);
-  ctx.fillStyle = "#6b5c92";
+  ctx.fillStyle = "#6b6d8c";
   ctx.font = "500 11px Inter, sans-serif";
   ctx.fillText("Ver ficha completa del equipo", centroX, baseCaption2);
   ctx.textAlign = "left";
@@ -739,17 +739,30 @@ $("#form").addEventListener("submit", async e => {
 
 $("#btn-clear").addEventListener("click",()=>{ modoCrear(); aviso("#msg-form","Formulario limpiado.","ok"); });
 
-/* Editar / Eliminar desde la tabla */
+/* Editar / Eliminar desde la tabla, y click en la fila → ficha completa del equipo */
 $("#tbody").addEventListener("click", async e => {
-  const ed=e.target.closest("[data-edit]"), dl=e.target.closest("[data-del]"), qr=e.target.closest("[data-qr]");
-  if(qr){ const eq=DB.listar().find(x=>x.id===qr.dataset.qr); if(eq) abrirQRModal(eq); }
-  if(ed){ const eq=DB.listar().find(x=>x.id===ed.dataset.edit); if(eq) modoEditar(eq); }
+  const ed=e.target.closest("[data-edit]"), dl=e.target.closest("[data-del]");
+  if(ed){ const eq=DB.listar().find(x=>x.id===ed.dataset.edit); if(eq) modoEditar(eq); return; }
   if(dl){
     const eq=DB.listar().find(x=>x.id===dl.dataset.del);
     if(eq && confirm(`¿Eliminar "${eq.nombre}" (${eq.codigo})?`)){
       try{ await DB.eliminar(eq.id); if(editandoId===eq.id) modoCrear(); }
       catch(err){ alert("Error al eliminar: "+err.message); }
     }
+    return;
+  }
+  /* Clic en cualquier otra parte de la fila abre la ficha completa (con el QR hasta abajo) */
+  const fila = e.target.closest(".row-clic");
+  if(fila && fila.dataset.codigo) location.href = urlDeEquipo(fila.dataset.codigo);
+});
+
+/* Misma navegación por teclado (Enter / Espacio) para accesibilidad */
+$("#tbody").addEventListener("keydown", e => {
+  const fila = e.target.closest(".row-clic");
+  if(!fila || e.target.closest(".acts")) return;
+  if(e.key==="Enter" || e.key===" "){
+    e.preventDefault();
+    if(fila.dataset.codigo) location.href = urlDeEquipo(fila.dataset.codigo);
   }
 });
 

@@ -304,7 +304,7 @@ function urlDeEquipo(codigo){
 
 function pintarQR(e){
   QRCode.toCanvas($("#qr-canvas"), urlDeEquipo(e.codigo), {
-    width:200, margin:1, color:{ dark:"#1f1240", light:"#ffffff" }
+    width:200, margin:1, color:{ dark:"#312e81", light:"#ffffff" }
   }, err => { if(err) console.error(err); });
 }
 
@@ -386,7 +386,7 @@ async function trazarPanelInfo(ctx, equipo, x, y, w, dibujar){
   iy += 25;
 
   /* Pill de estado: si funciona o no, sin necesidad de escanear */
-  const info = COLOR_ESTADO_ETIQUETA[equipo.estado] || { fondo:"#e4d9ff", texto:"#2a1850", etiqueta: equipo.estado || "Sin estado" };
+  const info = COLOR_ESTADO_ETIQUETA[equipo.estado] || { fondo:"#e0e7ff", texto:"#312e81", etiqueta: equipo.estado || "Sin estado" };
   const pillTexto = info.etiqueta.toUpperCase();
   ctx.font = "700 11.5px Inter, sans-serif";
   const pillW = ctx.measureText(pillTexto).width + 40;
@@ -479,12 +479,12 @@ async function generarEtiquetaCanvas(equipo){
   const ctx = canvas.getContext("2d");
   ctx.scale(ETIQUETA_ESCALA, ETIQUETA_ESCALA);
 
-  /* Fondo: el mismo degradado de marca que el resto del sitio */
+  /* Fondo: el mismo acento de marca (indigo) que el resto del sitio */
   const fondo = ctx.createLinearGradient(0, 0, W, H);
-  fondo.addColorStop(0,   "#6a44a8");
-  fondo.addColorStop(.45, "#432a78");
-  fondo.addColorStop(.8,  "#2a1850");
-  fondo.addColorStop(1,   "#1f1240");
+  fondo.addColorStop(0,   "#4f46e5");
+  fondo.addColorStop(.45, "#312e81");
+  fondo.addColorStop(.8,  "#181736");
+  fondo.addColorStop(1,   "#0c0c14");
   ctx.fillStyle = fondo;
   ctx.fillRect(0, 0, W, H);
 
@@ -520,7 +520,7 @@ async function generarEtiquetaCanvas(equipo){
   const qrCanvas = document.createElement("canvas");
   await new Promise((resolve, reject) => {
     QRCode.toCanvas(qrCanvas, urlDeEquipo(equipo.codigo), {
-      width: qrLado, margin: 1, color: { dark: "#1f1240", light: "#ffffff" }
+      width: qrLado, margin: 1, color: { dark: "#312e81", light: "#ffffff" }
     }, err => err ? reject(err) : resolve());
   });
   const qrX = panelQrX + (panelQrW - qrLado) / 2;
@@ -531,10 +531,10 @@ async function generarEtiquetaCanvas(equipo){
   const baseCaption1 = qrY + qrLado + gapCaption + 14; /* +14 ≈ ascenso del texto de 17px */
   const baseCaption2 = baseCaption1 + 17;
   ctx.textAlign = "center";
-  ctx.fillStyle = "#1f1240";
+  ctx.fillStyle = "#312e81";
   ctx.font = "800 17px Inter, sans-serif";
   ctx.fillText("ESCANÉAME", centroX, baseCaption1);
-  ctx.fillStyle = "#6b5c92";
+  ctx.fillStyle = "#6b6d8c";
   ctx.font = "500 11px Inter, sans-serif";
   ctx.fillText("Ver ficha completa del equipo", centroX, baseCaption2);
   ctx.textAlign = "left";

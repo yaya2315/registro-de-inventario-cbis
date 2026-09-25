@@ -13,7 +13,7 @@ body{ padding:0 0 60px; }
 .topbar > div{ flex:1; min-width:0; }
 .topbar h1{
   font-size:clamp(1.4rem,3.5vw,1.85rem); font-weight:700; letter-spacing:-.02em; line-height:1.1;
-  background:linear-gradient(180deg,#fff,#e3d8ff); -webkit-background-clip:text; background-clip:text; color:transparent;
+  background:linear-gradient(180deg,#fff,#e0e7ff); -webkit-background-clip:text; background-clip:text; color:transparent;
   white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
 }
 .topbar p{ font-size:.88rem; color:var(--txt-soft); font-weight:500; margin-top:2px; }
@@ -32,26 +32,26 @@ body{ padding:0 0 60px; }
 @media(min-width:620px){ .stats{ grid-template-columns:repeat(4,1fr); } }
 .stat{
   appearance:none; -webkit-appearance:none; font-family:inherit; text-align:left; cursor:pointer;
-  background:var(--card-bg); border:1.5px solid var(--card-border); border-radius:var(--radius-lg);
+  background:var(--card-bg); border:1px solid var(--card-border); border-radius:var(--radius-lg);
   padding:16px; display:flex; flex-direction:column; gap:10px;
-  backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px); box-shadow:0 16px 40px -22px rgba(0,0,0,.5);
+  box-shadow:0 1px 0 rgba(255,255,255,.03) inset;
   transition:transform .18s var(--ease), border-color .18s var(--ease), background .18s var(--ease), box-shadow .18s var(--ease);
 }
 .stat:hover{ transform:translateY(-2px); border-color:rgba(255,255,255,.28); }
-.stat:focus-visible{ outline:none; box-shadow:0 0 0 4px rgba(123,79,240,.35); }
+.stat:focus-visible{ outline:none; box-shadow:0 0 0 4px rgba(99,102,241,.35); }
 .stat:active{ transform:translateY(0); }
 .stat .ico{ width:40px; height:40px; border-radius:11px; display:grid; place-items:center; }
 .stat .ico svg{ width:21px; height:21px; }
 .stat .lbl{ font-size:.78rem; color:var(--txt-soft); font-weight:500; }
 .stat .num{ font-size:1.7rem; font-weight:700; line-height:1; letter-spacing:-.02em; }
-.stat.total .ico{ background:rgba(123,79,240,.18); color:#b69cff; } .stat.total .num{ color:#c9b6ff; }
+.stat.total .ico{ background:rgba(99,102,241,.18); color:#a5b4fc; } .stat.total .num{ color:#c7d2fe; }
 .stat.activo .ico{ background:rgba(69,169,156,.18); color:var(--teal); } .stat.activo .num{ color:#6fd6c6; }
 .stat.mant .ico{ background:rgba(245,182,20,.16); color:var(--gold); } .stat.mant .num{ color:var(--gold); }
 .stat.baja .ico{ background:rgba(229,93,78,.16); color:var(--coral); } .stat.baja .num{ color:#ff8a7a; }
 
 /* Estado activo (filtro seleccionado) — anillo de color a juego con la categoría */
 .stat.active{ background:rgba(255,255,255,.1); }
-.stat.total.active{ border-color:var(--violet); box-shadow:0 0 0 3px rgba(123,79,240,.28), 0 16px 40px -22px rgba(0,0,0,.5); }
+.stat.total.active{ border-color:var(--violet); box-shadow:0 0 0 3px rgba(99,102,241,.28), 0 16px 40px -22px rgba(0,0,0,.5); }
 .stat.baja.active{ border-color:var(--coral); box-shadow:0 0 0 3px rgba(229,93,78,.28), 0 16px 40px -22px rgba(0,0,0,.5); }
 .stat.mant.active{ border-color:var(--gold); box-shadow:0 0 0 3px rgba(245,182,20,.28), 0 16px 40px -22px rgba(0,0,0,.5); }
 .stat.activo.active{ border-color:var(--teal); box-shadow:0 0 0 3px rgba(69,169,156,.28), 0 16px 40px -22px rgba(0,0,0,.5); }
@@ -73,22 +73,21 @@ body{ padding:0 0 60px; }
 .btn-abrir-registro{
   appearance:none; width:100%; display:flex; align-items:center; gap:14px; text-align:left;
   padding:18px 20px; margin-bottom:20px; cursor:pointer; font-family:inherit; color:var(--txt);
-  background:linear-gradient(135deg, rgba(123,79,240,.22), rgba(90,50,192,.14));
-  border:1.5px dashed rgba(180,150,255,.45); border-radius:var(--radius-lg);
-  backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
+  background:linear-gradient(135deg, rgba(99,102,241,.16), rgba(79,70,229,.09));
+  border:1.5px dashed rgba(165,180,252,.4); border-radius:var(--radius-lg);
   transition:transform .18s var(--ease), border-color .18s var(--ease), background .18s var(--ease), box-shadow .18s var(--ease);
 }
 .btn-abrir-registro:hover{
   transform:translateY(-2px); border-color:var(--violet); border-style:solid;
-  background:linear-gradient(135deg, rgba(123,79,240,.32), rgba(90,50,192,.2));
-  box-shadow:0 16px 40px -18px rgba(123,79,240,.5);
+  background:linear-gradient(135deg, rgba(99,102,241,.32), rgba(79,70,229,.2));
+  box-shadow:0 16px 40px -18px rgba(99,102,241,.5);
 }
-.btn-abrir-registro:focus-visible{ outline:none; box-shadow:0 0 0 4px rgba(123,79,240,.35); }
+.btn-abrir-registro:focus-visible{ outline:none; box-shadow:0 0 0 4px rgba(99,102,241,.35); }
 .btn-abrir-registro:active{ transform:translateY(0); }
 .btn-abrir-registro .ico-plus{
   flex-shrink:0; width:44px; height:44px; border-radius:12px; display:grid; place-items:center;
   background:linear-gradient(135deg,var(--violet),var(--violet-strong)); color:#fff;
-  box-shadow:0 10px 24px -8px rgba(123,79,240,.65);
+  box-shadow:0 10px 24px -8px rgba(99,102,241,.65);
 }
 .btn-abrir-registro .ico-plus svg{ width:22px; height:22px; }
 .btn-abrir-registro strong{ display:block; font-size:1rem; font-weight:650; letter-spacing:-.01em; }
@@ -99,7 +98,7 @@ body{ padding:0 0 60px; }
   display:none; position:fixed; inset:0; z-index:1000;
   align-items:flex-start; justify-content:center;
   padding:6vh 18px; overflow-y:auto; -webkit-overflow-scrolling:touch;
-  background:rgba(8,4,24,.72); backdrop-filter:blur(10px) saturate(120%); -webkit-backdrop-filter:blur(10px) saturate(120%);
+  background:rgba(5,5,10,.86);
 }
 .modal-overlay.open{ display:flex; animation:modalFade .22s var(--ease); }
 @keyframes modalFade{ from{ opacity:0; } to{ opacity:1; } }
@@ -122,18 +121,16 @@ body{ padding:0 0 60px; }
 
 #btn-cancelar{ margin-left:auto; }
 
-/* Tarjetas */
+/* Tarjetas: superficie sólida y plana (sin glassmorphism) — más nítida,
+   más legible y consistente venga lo que venga detrás. */
 .card{
-  background:rgba(255,255,255,.08); border:1.5px solid rgba(255,255,255,.15); border-radius:var(--radius-lg);
+  background:var(--card-bg); border:1px solid var(--card-border); border-radius:var(--radius-lg);
   padding:22px 20px; margin-bottom:20px;
-  backdrop-filter:blur(20px) saturate(140%); -webkit-backdrop-filter:blur(20px) saturate(140%);
-  box-shadow:0 20px 50px -20px rgba(0,0,0,.6), inset 0 1px 0 rgba(255,255,255,.08);
+  box-shadow:0 1px 0 rgba(255,255,255,.03) inset, 0 24px 48px -32px rgba(0,0,0,.7);
 }
-/* Tarjeta de registro: fondo oscuro propio para que los campos destaquen */
-#form-card{
-  background:rgba(20,10,42,.92); border:2px solid rgba(123,79,240,.5);
-  box-shadow:0 24px 60px -20px rgba(0,0,0,.7), 0 0 0 1px rgba(123,79,240,.2), inset 0 1px 0 rgba(255,255,255,.06);
-}
+/* Tarjeta de registro: el mismo fondo, sólo un borde de acento para
+   distinguirla como la acción principal de la página. */
+#form-card{ border-color:rgba(99,102,241,.45); }
 #form-card.modal-panel{ padding-top:34px; padding-right:52px; }
 .card-title{ display:flex; align-items:center; gap:9px; font-size:1.12rem; font-weight:650; margin-bottom:4px; letter-spacing:-.01em; }
 .card-title svg{ width:19px; height:19px; color:var(--violet); }
@@ -147,7 +144,7 @@ label.fl .req{ color:#ff7eb3; }
 
 input, select, textarea{
   width:100%; min-height:50px; padding:13px 16px; font-size:.95rem; font-family:inherit; color:#fff;
-  background:rgba(20,10,50,.55); border:2px solid rgba(180,150,255,.4); border-radius:var(--radius); outline:none;
+  background:rgba(20,10,50,.55); border:2px solid rgba(165,180,252,.4); border-radius:var(--radius); outline:none;
   transition:border-color .2s var(--ease), box-shadow .2s var(--ease), background .2s var(--ease);
   box-shadow:inset 0 2px 6px rgba(0,0,0,.4);
 }
@@ -159,10 +156,10 @@ select{
   background-repeat:no-repeat; background-position:right 14px center; padding-right:38px;
 }
 select option{ background:#1a0d3d; color:#fff; }
-input:hover, select:hover, textarea:hover{ border-color:rgba(180,150,255,.7); background:rgba(30,15,65,.65); }
+input:hover, select:hover, textarea:hover{ border-color:rgba(165,180,252,.7); background:rgba(30,15,65,.65); }
 input:focus, select:focus, textarea:focus{
   border-color:#a07cff; background:rgba(40,20,80,.7);
-  box-shadow:0 0 0 4px rgba(123,79,240,.3), inset 0 2px 6px rgba(0,0,0,.35);
+  box-shadow:0 0 0 4px rgba(99,102,241,.3), inset 0 2px 6px rgba(0,0,0,.35);
 }
 
 /* Encabezados de grupo dentro de los desplegables (Ubicación) */
@@ -175,7 +172,7 @@ select optgroup{ background:#1a0d3d; color:var(--txt-muted); font-weight:700; }
   transition:transform .18s var(--ease), filter .18s var(--ease), box-shadow .18s var(--ease), background .18s;
 }
 .btn svg{ width:18px; height:18px; }
-.btn-primary{ color:#fff; background:linear-gradient(135deg,var(--violet),var(--violet-strong)); box-shadow:0 12px 28px -10px rgba(123,79,240,.6), inset 0 1px 0 rgba(255,255,255,.22); }
+.btn-primary{ color:#fff; background:linear-gradient(135deg,var(--violet),var(--violet-strong)); box-shadow:0 8px 20px -10px rgba(99,102,241,.5), inset 0 1px 0 rgba(255,255,255,.16); }
 .btn-primary:hover{ transform:translateY(-2px); filter:brightness(1.06); }
 .btn-primary:active{ transform:translateY(0); }
 .btn-primary[disabled]{ cursor:wait; filter:saturate(.7) brightness(.95); transform:none; }
@@ -216,18 +213,27 @@ tbody tr:hover{ background:rgba(255,255,255,.03); }
 .nom{ font-weight:600; color:#fff; max-width:170px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 .empty{ text-align:center; padding:30px 10px; color:var(--txt-muted); font-size:.9rem; }
 
+/* Fila clicable → abre la ficha completa del equipo (con el QR hasta abajo) */
+tbody tr.row-clic{ cursor:pointer; }
+tbody tr.row-clic:hover{ background:rgba(99,102,241,.08); }
+tbody tr.row-clic:focus-visible{ outline:none; box-shadow:inset 0 0 0 2px var(--violet); background:rgba(99,102,241,.08); }
+tbody tr.row-clic:active{ background:rgba(99,102,241,.13); }
+
 .pill{ display:inline-flex; align-items:center; gap:5px; font-size:.76rem; font-weight:600; padding:5px 10px; border-radius:999px; white-space:nowrap; }
 .pill.activo{ color:#6fd6c6; background:rgba(69,169,156,.16); }
 .pill.mantenimiento{ color:var(--gold); background:rgba(245,182,20,.15); }
 .pill.baja{ color:#ff8a7a; background:rgba(229,93,78,.15); }
 .pill::before{ content:""; width:6px; height:6px; border-radius:50%; background:currentColor; }
 
-.acts{ display:flex; gap:7px; justify-content:flex-end; }
-.icon-btn{ width:34px; height:34px; border-radius:9px; border:1px solid var(--card-border); background:var(--field-bg); display:grid; place-items:center; cursor:pointer; transition:all .18s var(--ease); }
+.acts{ display:flex; align-items:center; gap:7px; justify-content:flex-end; }
+.icon-btn{ width:34px; height:34px; border-radius:9px; border:1px solid var(--card-border); background:var(--field-bg); display:grid; place-items:center; cursor:pointer; transition:all .18s var(--ease); position:relative; z-index:1; }
 .icon-btn svg{ width:16px; height:16px; }
-.icon-btn.qr{ color:var(--gold); } .icon-btn.qr:hover{ background:rgba(245,182,20,.16); border-color:rgba(245,182,20,.45); transform:translateY(-1px); }
-.icon-btn.edit{ color:#b69cff; } .icon-btn.edit:hover{ background:rgba(123,79,240,.18); border-color:rgba(123,79,240,.45); transform:translateY(-1px); }
+.icon-btn.edit{ color:#a5b4fc; } .icon-btn.edit:hover{ background:rgba(99,102,241,.18); border-color:rgba(99,102,241,.45); transform:translateY(-1px); }
 .icon-btn.del{ color:#ff8a7a; } .icon-btn.del:hover{ background:rgba(229,93,78,.16); border-color:rgba(229,93,78,.45); transform:translateY(-1px); }
+
+/* Chevron discreto al final de la fila: refuerza que toda la fila es clicable */
+.row-clic-chevron{ width:16px; height:16px; margin-left:2px; color:var(--txt-muted); flex-shrink:0; transition:transform .18s var(--ease), color .18s var(--ease); }
+tbody tr.row-clic:hover .row-clic-chevron{ color:var(--violet); transform:translateX(2px); }
 
 /* ════════════ MODAL: CÓDIGO QR ════════════ */
 .qr-modal-panel{ max-width:420px; text-align:center; }
@@ -320,7 +326,7 @@ tbody tr:hover{ background:rgba(255,255,255,.03); }
 /* ════════════ LIGHTBOX ════════════ */
 #lightbox{
   display:none; position:fixed; inset:0; z-index:9999;
-  background:rgba(5,2,20,.92); backdrop-filter:blur(10px);
+  background:rgba(4,4,9,.95);
   flex-direction:column; align-items:center; justify-content:center;
   animation:rise .22s var(--ease);
 }
@@ -364,7 +370,7 @@ tbody tr:hover{ background:rgba(255,255,255,.03); }
   transition:background .18s, transform .18s;
   font-size:22px;
 }
-.lb-arrow:hover{ background:rgba(123,79,240,.55); transform:translateY(-50%) scale(1.08); }
+.lb-arrow:hover{ background:rgba(99,102,241,.55); transform:translateY(-50%) scale(1.08); }
 #lb-prev{ left:12px; }
 #lb-next{ right:12px; }
 .lb-arrow.hidden{ opacity:0; pointer-events:none; }
@@ -372,10 +378,10 @@ tbody tr:hover{ background:rgba(255,255,255,.03); }
 /* Miniaturas desplazables */
 #lb-thumbs{
   display:flex; gap:8px; overflow-x:auto; padding:10px 18px 16px;
-  max-width:100%; scrollbar-width:thin; scrollbar-color:rgba(123,79,240,.5) transparent;
+  max-width:100%; scrollbar-width:thin; scrollbar-color:rgba(99,102,241,.5) transparent;
 }
 #lb-thumbs::-webkit-scrollbar{ height:4px; }
-#lb-thumbs::-webkit-scrollbar-thumb{ background:rgba(123,79,240,.5); border-radius:4px; }
+#lb-thumbs::-webkit-scrollbar-thumb{ background:rgba(99,102,241,.5); border-radius:4px; }
 .lb-thumb{
   flex-shrink:0; width:64px; height:64px; border-radius:9px; overflow:hidden;
   border:2px solid transparent; cursor:pointer; opacity:.55;
@@ -399,7 +405,7 @@ tbody tr:hover{ background:rgba(255,255,255,.03); }
 .peq-outline{ fill:none; stroke:rgba(255,255,255,.16); stroke-width:.055; transition:stroke .15s, stroke-width .15s; }
 .peq-hit[role="button"]{ cursor:pointer; }
 .peq-hit:hover + .peq-outline, .peq-hit:focus-visible + .peq-outline{ stroke:var(--violet); stroke-width:.1; }
-.peq-roomg.peq-hl .peq-rm{ fill:rgba(123,79,240,.38); }
+.peq-roomg.peq-hl .peq-rm{ fill:rgba(99,102,241,.38); }
 .peq-roomg.peq-hl .peq-outline{ stroke:var(--violet); stroke-width:.12; }
 .peq-rlabel{ fill:rgba(255,255,255,.8); font-weight:650; text-anchor:middle; pointer-events:none; }
 .peq-mk{ pointer-events:none; }
@@ -443,12 +449,10 @@ tbody tr:hover{ background:rgba(255,255,255,.03); }
   position:relative; border-radius:var(--radius-lg); overflow:hidden;
   background:rgba(8,4,22,.5); border:1px solid var(--card-border);
   touch-action:none; height:280px;
-  /* Este mapa vive dentro de una tarjeta con backdrop-filter (blur) y su
-     pin cambia de escala en cada paso de zoom — esa combinación es una
-     causa conocida de un bug de composición en Chrome/Edge sobre Windows
-     (con ciertas tarjetas gráficas) donde el contenido se ve como una
-     mancha negra con un borde blanco borroso. Aislarlo en su propia capa
-     de composición (fuera del alcance del blur del padre) evita el bug. */
+  /* El pin cambia de escala en cada paso de zoom sobre contenido SVG que
+     se redibuja; aislarlo en su propia capa de composición evita cualquier
+     glitch de repintado en navegadores/tarjetas gráficas puntuales
+     (además, la tarjeta que lo envuelve ya no usa backdrop-filter). */
   isolation:isolate; transform:translateZ(0); -webkit-transform:translateZ(0);
 }
 .peq-stage svg{ display:block; width:100%; height:100%; }
@@ -463,7 +467,7 @@ tbody tr:hover{ background:rgba(255,255,255,.03); }
   transition:background .16s var(--ease), border-color .16s var(--ease), color .16s var(--ease);
 }
 .peq-tab:hover{ background:rgba(255,255,255,.1); color:#fff; }
-.peq-tab[aria-pressed="true"]{ background:rgba(123,79,240,.28); border-color:var(--violet); color:#fff; }
+.peq-tab[aria-pressed="true"]{ background:rgba(99,102,241,.28); border-color:var(--violet); color:#fff; }
 .peq-tab-tag{
   font-family:"JetBrains Mono",ui-monospace,monospace; font-size:.66rem; font-weight:700;
   opacity:.75; border:1px solid currentColor; border-radius:4px; padding:1px 4px;
@@ -487,15 +491,7 @@ tbody tr:hover{ background:rgba(255,255,255,.03); }
 .ubicacion-chip{ font-size:.85rem; color:var(--txt-soft); line-height:1.4; }
 .ubicacion-chip strong{ display:block; color:#fff; font-size:.92rem; }
 
-/* Esta tarjeta contiene un mapa que se redibuja por completo (innerHTML)
-   en cada toque — combinado con el "backdrop-filter: blur" que traen
-   todas las .card, eso disparaba un bug real de composición en Chrome/
-   Edge sobre Windows: justo al hacer clic aparecía una mancha negra con
-   borde blanco tapando el mapa, que se autocorregía en el siguiente
-   repintado (zoom/paneo). Aislar el <svg> en su propia capa no bastó, así
-   que aquí se quita directamente el desenfoque y se usa un fondo sólido
-   en su lugar — sin blur no hay bug posible. */
-.peq-picker-panel{ max-width:760px; background:rgba(17,9,34,.97); backdrop-filter:none; -webkit-backdrop-filter:none; }
+.peq-picker-panel{ max-width:760px; }
 .peq-picker-panel .peq-stage{ height:min(48vh, 420px); }
 .peq-picker-paso2{ margin-top:14px; }
 .peq-picker-paso2 .peq-stage{ height:min(38vh, 320px); }
@@ -508,15 +504,12 @@ tbody tr:hover{ background:rgba(255,255,255,.03); }
 .peq-picker-confirmacion .txt strong{ color:#fff; }
 
 /* Mapa grande en la ficha del equipo */
-/* Mismo motivo que .peq-picker-panel: sin blur en la tarjeta que envuelve
-   el mapa de la ficha, para evitar el bug de composición del navegador. */
-.ubicacion-mapa{ background:rgba(17,9,34,.97); backdrop-filter:none; -webkit-backdrop-filter:none; }
 .ubicacion-mapa .peq-stage{ height:340px; margin-bottom:12px; }
 .ubicacion-mapa .peq-editar-acciones{ display:flex; flex-wrap:wrap; gap:10px; }
 .ubicacion-mapa .peq-editar-acciones .btn{ flex:1; min-width:180px; }
 .ubicacion-sin-mapa{
-  padding:22px 18px; text-align:center; border:1.5px dashed rgba(180,150,255,.35);
-  border-radius:var(--radius-lg); background:rgba(123,79,240,.06); color:var(--txt-muted); font-size:.85rem;
+  padding:22px 18px; text-align:center; border:1.5px dashed rgba(165,180,252,.35);
+  border-radius:var(--radius-lg); background:rgba(99,102,241,.06); color:var(--txt-muted); font-size:.85rem;
 }
 
 /* ══════════════════════════════════════════════════════════════
@@ -603,6 +596,10 @@ tbody tr:hover{ background:rgba(255,255,255,.03); }
   .acts{ gap:5px; }
   .icon-btn{ width:30px; height:30px; border-radius:7px; }
   .icon-btn svg{ width:14px; height:14px; }
+  /* En pantallas angostas se oculta (la fila entera ya es clicable; esto
+     libera ancho para que "editar"/"eliminar" queden a la vista con el
+     menor scroll horizontal posible) */
+  .row-clic-chevron{ display:none; }
 
   /* Banner edición */
   .edit-banner{ font-size:.8rem; padding:10px 12px; gap:7px; }
