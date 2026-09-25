@@ -804,15 +804,26 @@ $("#tbody").addEventListener("click", async e => {
   if(dl){
     const eq=DB.listar().find(x=>x.id===dl.dataset.del);
     if(eq){
-      const ok = await confirmarAccion({
+      /* Desde el listado principal se pide confirmar dos veces antes de
+         borrar — es la vista donde es más fácil dar clic por accidente
+         entre varias filas, así que un solo "¿Eliminar?" no basta. */
+      const ok1 = await confirmarAccion({
         titulo: "Eliminar equipo",
         mensaje: `¿Eliminar "${eq.nombre}" (${eq.codigo})? Esta acción no se puede deshacer.`,
         textoAceptar: "Eliminar",
         peligro: true
       });
-      if(ok){
-        try{ await DB.eliminar(eq.id); if(editandoId===eq.id) modoCrear(); }
-        catch(err){ alert("Error al eliminar: "+err.message); }
+      if(ok1){
+        const ok2 = await confirmarAccion({
+          titulo: "Confirma una vez más",
+          mensaje: `Última confirmación: "${eq.nombre}" (${eq.codigo}) se eliminará de forma permanente del inventario.`,
+          textoAceptar: "Sí, eliminar definitivamente",
+          peligro: true
+        });
+        if(ok2){
+          try{ await DB.eliminar(eq.id); if(editandoId===eq.id) modoCrear(); }
+          catch(err){ alert("Error al eliminar: "+err.message); }
+        }
       }
     }
     return;
