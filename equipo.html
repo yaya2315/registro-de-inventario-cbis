@@ -9,8 +9,8 @@
   <title>Ficha de Equipo · cbis</title>
 
   <link rel="icon" href="Imagenes/Cbis_transparente.png" />
-  <link rel="stylesheet" href="estilos-base.css" />
-  <link rel="stylesheet" href="estilos-equipo.css?v=20260924c" />
+  <link rel="stylesheet" href="estilos-base.css?v=20260925a" />
+  <link rel="stylesheet" href="estilos-equipo.css?v=20260925a" />
 </head>
 <body>
   <span class="glow g1" aria-hidden="true"></span>
@@ -18,6 +18,13 @@
   <span class="glow g3" aria-hidden="true"></span>
 
   <div class="wrap wrap-equipo">
+    <!-- Solo visible si se llegó aquí haciendo clic en una fila del menú
+         principal (no al escanear el QR ni con el enlace directo) -->
+    <a href="inventario.html" class="volver-menu" id="btn-volver-menu" hidden>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      Volver al menú
+    </a>
+
     <!-- Encabezado -->
     <header class="topbar">
       <img class="logo" src="Imagenes/Cbis_transparente.png" alt="cbis" />
@@ -243,6 +250,6 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
-  <script type="module" src="equipo.js?v=20260924c"></script>
+  <script type="module" src="equipo.js?v=20260925a"></script>
 </body>
 </html>

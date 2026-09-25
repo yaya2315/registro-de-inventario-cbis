@@ -10,7 +10,7 @@ import { getAuth, signInWithEmailAndPassword, signOut, setPersistence, browserSe
 import { getFirestore, collection, query, where, getDocs, doc, deleteDoc, updateDoc }
   from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 import { NIVELES, crearVisorPlano, montarPestanasNiveles, textoUbicacion }
-  from "./plano-equipos.js?v=20260924c"; // ← sube este número cada vez que cambie plano-equipos.js: los navegadores cachean agresivamente los módulos ES y si no, se sigue viendo la versión vieja aunque el archivo ya se haya actualizado en el servidor
+  from "./plano-equipos.js?v=20260925a"; // ← sube este número cada vez que cambie plano-equipos.js: los navegadores cachean agresivamente los módulos ES y si no, se sigue viendo la versión vieja aunque el archivo ya se haya actualizado en el servidor
 
 /* Misma configuración de Firebase que el resto del sitio */
 const firebaseConfig = {
@@ -41,6 +41,11 @@ let fichaMapaBorrador = null;
    ═══════════════════════════════════════════════════════════════ */
 const params = new URLSearchParams(location.search);
 const codigoInicial = (params.get("codigo") || "").trim();
+
+/* El botón "Volver al menú" solo aparece si se llegó haciendo clic en una
+   fila del listado principal (esa navegación agrega "&desde=menu" a la
+   URL) — quien entra escaneando el QR o con el enlace directo no lo ve. */
+if(params.get("desde") === "menu") $("#btn-volver-menu").hidden = false;
 
 if(codigoInicial) buscarYRenderizar(codigoInicial);
 else mostrarBusqueda();

@@ -1,4 +1,4 @@
-@import url("estilos-inventario.css?v=20260924c");
+@import url("estilos-inventario.css?v=20260925a");
 /* ════════════════════════════════════════════════════════════
    ESTILOS FICHA DE EQUIPO · cbis
    Página pública a la que apunta el código QR de cada equipo.
@@ -8,6 +8,21 @@
    ════════════════════════════════════════════════════════════ */
 
 .wrap-equipo{ max-width:640px; }
+
+/* ════════════ BOTÓN "VOLVER AL MENÚ" ════════════
+   Solo visible cuando se llega desde una fila del listado (ver equipo.js) —
+   quien entra escaneando el QR o con el enlace directo no lo ve. */
+.volver-menu{
+  display:inline-flex; align-items:center; gap:7px; margin-bottom:14px;
+  padding:9px 16px 9px 12px; border-radius:999px; border:1px solid var(--card-border);
+  background:var(--field-bg); color:var(--txt-soft); font-size:.85rem; font-weight:600;
+  text-decoration:none; position:relative; z-index:1;
+  transition:background .18s var(--ease), color .18s var(--ease), border-color .18s var(--ease), transform .18s var(--ease);
+}
+.volver-menu svg{ width:16px; height:16px; flex-shrink:0; transition:transform .18s var(--ease); }
+.volver-menu:hover{ background:rgba(99,102,241,.14); border-color:rgba(99,102,241,.4); color:#fff; }
+.volver-menu:hover svg{ transform:translateX(-2px); }
+.volver-menu:active{ transform:scale(.96); }
 
 /* ════════════ ESTADOS: cargando / no encontrado / búsqueda ════════════ */
 .estado-carga{ text-align:center; padding:46px 20px; color:var(--txt-soft); }

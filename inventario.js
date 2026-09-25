@@ -9,7 +9,7 @@ import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/fi
 import { getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot, query, orderBy }
   from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 import { NIVELES, crearVisorPlano, montarPestanasNiveles, textoUbicacion, dibujarPlanoEstatico }
-  from "./plano-equipos.js?v=20260924c"; // ← sube este número cada vez que cambie plano-equipos.js: los navegadores cachean agresivamente los módulos ES y si no, se sigue viendo la versión vieja aunque el archivo ya se haya actualizado en el servidor
+  from "./plano-equipos.js?v=20260925a"; // ← sube este número cada vez que cambie plano-equipos.js: los navegadores cachean agresivamente los módulos ES y si no, se sigue viendo la versión vieja aunque el archivo ya se haya actualizado en el servidor
 
 /* Configuración de tu proyecto Firebase */
 const firebaseConfig = {
@@ -828,9 +828,13 @@ $("#tbody").addEventListener("click", async e => {
     }
     return;
   }
-  /* Clic en cualquier otra parte de la fila abre la ficha completa (con el QR hasta abajo) */
+  /* Clic en cualquier otra parte de la fila abre la ficha completa (con el QR hasta abajo).
+     Se agrega "&desde=menu" solo en esta navegación interna, para que la
+     ficha sepa mostrar el botón de "Volver al menú" — quien llega
+     escaneando el QR o con el enlace directo no trae esa marca y no ve
+     el botón. */
   const fila = e.target.closest(".row-clic");
-  if(fila && fila.dataset.codigo) location.href = urlDeEquipo(fila.dataset.codigo);
+  if(fila && fila.dataset.codigo) location.href = urlDeEquipo(fila.dataset.codigo) + "&desde=menu";
 });
 
 /* Misma navegación por teclado (Enter / Espacio) para accesibilidad */
@@ -839,7 +843,7 @@ $("#tbody").addEventListener("keydown", e => {
   if(!fila || e.target.closest(".acts")) return;
   if(e.key==="Enter" || e.key===" "){
     e.preventDefault();
-    if(fila.dataset.codigo) location.href = urlDeEquipo(fila.dataset.codigo);
+    if(fila.dataset.codigo) location.href = urlDeEquipo(fila.dataset.codigo) + "&desde=menu";
   }
 });
 
