@@ -150,12 +150,29 @@ function animarNumero(el, valorFinal){
   requestAnimationFrame(paso);
 }
 
+const ANILLO_CIRCUNFERENCIA = 106.8; // 2 · π · 17 (radio del círculo del anillo)
+
+// Anima el anillo de progreso de una tarjeta de estadística hacia el % que representa del total.
+function animarAnillo(id, cantidad, total){
+  const el = document.getElementById(id);
+  if(!el) return;
+  const pct = total > 0 ? cantidad / total : 0;
+  el.style.strokeDashoffset = String(ANILLO_CIRCUNFERENCIA * (1 - pct));
+}
+
 function pintarStats(){
   const t = DB.listar();
-  animarNumero($("#st-total"),  t.length);
-  animarNumero($("#st-activo"), t.filter(e=>e.estado==="activo").length);
-  animarNumero($("#st-mant"),   t.filter(e=>e.estado==="mantenimiento").length);
-  animarNumero($("#st-baja"),   t.filter(e=>e.estado==="baja").length);
+  const total   = t.length;
+  const activo  = t.filter(e=>e.estado==="activo").length;
+  const mant    = t.filter(e=>e.estado==="mantenimiento").length;
+  const baja    = t.filter(e=>e.estado==="baja").length;
+  animarNumero($("#st-total"),  total);
+  animarNumero($("#st-activo"), activo);
+  animarNumero($("#st-mant"),   mant);
+  animarNumero($("#st-baja"),   baja);
+  animarAnillo("anillo-activo", activo, total);
+  animarAnillo("anillo-mant",   mant,   total);
+  animarAnillo("anillo-baja",   baja,   total);
 }
 
 function pintarTabla(filtro=""){

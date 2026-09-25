@@ -9,7 +9,7 @@
 
   <link rel="icon" href="Imagenes/Cbis_transparente.png" />
   <link rel="stylesheet" href="estilos-base.css?v=20260925a" />
-  <link rel="stylesheet" href="estilos-inventario.css?v=20260925a" />
+  <link rel="stylesheet" href="estilos-inventario.css?v=20260925b" />
 </head>
 <body>
   <span class="glow g1" aria-hidden="true"></span>
@@ -40,15 +40,24 @@
         <div><div class="lbl">Total Equipos</div><div class="num" id="st-total">0</div></div>
       </button>
       <button type="button" class="stat baja" id="filtro-baja" data-filtro="baja" aria-pressed="false">
-        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m4.9 4.9 14.2 14.2"/></svg></div>
+        <div class="ico">
+          <svg class="stat-anillo" viewBox="0 0 40 40" aria-hidden="true"><circle class="stat-anillo-fondo" cx="20" cy="20" r="17"/><circle class="stat-anillo-relleno" id="anillo-baja" cx="20" cy="20" r="17"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m4.9 4.9 14.2 14.2"/></svg>
+        </div>
         <div><div class="lbl">De Baja</div><div class="num" id="st-baja">0</div></div>
       </button>
       <button type="button" class="stat mant" id="filtro-mant" data-filtro="mantenimiento" aria-pressed="false">
-        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><path d="M12 9v4M12 17h.01"/></svg></div>
+        <div class="ico">
+          <svg class="stat-anillo" viewBox="0 0 40 40" aria-hidden="true"><circle class="stat-anillo-fondo" cx="20" cy="20" r="17"/><circle class="stat-anillo-relleno" id="anillo-mant" cx="20" cy="20" r="17"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><path d="M12 9v4M12 17h.01"/></svg>
+        </div>
         <div><div class="lbl">En Mantenimiento</div><div class="num" id="st-mant">0</div></div>
       </button>
       <button type="button" class="stat activo" id="filtro-activo" data-filtro="activo" aria-pressed="false">
-        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg></div>
+        <div class="ico">
+          <svg class="stat-anillo" viewBox="0 0 40 40" aria-hidden="true"><circle class="stat-anillo-fondo" cx="20" cy="20" r="17"/><circle class="stat-anillo-relleno" id="anillo-activo" cx="20" cy="20" r="17"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>
+        </div>
         <div><div class="lbl">Activos</div><div class="num" id="st-activo">0</div></div>
       </button>
     </section>
@@ -360,6 +369,6 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
-  <script type="module" src="inventario.js?v=20260925a"></script>
+  <script type="module" src="inventario.js?v=20260925b"></script>
 </body>
 </html>
